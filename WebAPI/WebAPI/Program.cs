@@ -1,6 +1,6 @@
 using Imagekit;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Model;
+using WebAPI.Database;
 
 namespace WebAPI
 {
