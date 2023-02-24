@@ -1,6 +1,8 @@
 using Imagekit;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Database;
+using WebAPI.Interface;
+using WebAPI.Repository;
 
 namespace WebAPI
 {
@@ -12,7 +14,7 @@ namespace WebAPI
 
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
             builder.Services.AddCors(option =>
@@ -26,8 +28,12 @@ namespace WebAPI
             {
                 options.UseSqlServer(builder.Configuration["SQL"]);
             });
-
-            var app = builder.Build();
+            builder.Services.BuildServiceProvider().GetService<AppDBContext>().Database.Migrate();
+            builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+            builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+            WebApplication app = builder.Build();
             Config = app.Configuration;
 
             app.UseCors();

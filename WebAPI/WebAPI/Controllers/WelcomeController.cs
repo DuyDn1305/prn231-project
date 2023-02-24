@@ -12,7 +12,7 @@ namespace WebAPI.Controllers
             {
                 message = "Welcome to Book API Server",
                 version = "1.0"
-            });
+            }); ;
         }
     }
 }

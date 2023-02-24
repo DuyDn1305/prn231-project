@@ -15,10 +15,10 @@ namespace WebAPI.Model
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 100 characters.")]
         public string Title { get; set; } = string.Empty;
 
-        [StringLength(500, ErrorMessage = "Description must be at most 500 characters.")]
+        [StringLength(2000, ErrorMessage = "Description must be at most 2000 characters.")]
         public string? Description { get; set; } = string.Empty;
 
-        [StringLength(2000, ErrorMessage = "Cover image URL must be at most 2000 characters.")]
+        [StringLength(500, ErrorMessage = "Cover image URL must be at most 500 characters.")]
         public string? CoverImage { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Category is required.")]
