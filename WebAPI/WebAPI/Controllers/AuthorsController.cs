@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Interface;
 using WebAPI.Model;
+using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthorsController : ControllerBase
+    public class AuthorsController : BaseController
     {
-        private readonly IAuthorRepository _authorRepository;
+        private readonly AuthorRepository _authorRepository;
 
-        public AuthorsController(IAuthorRepository authorRepository)
+        public AuthorsController(AuthorRepository authorRepository)
         {
             _authorRepository = authorRepository;
         }

@@ -15,11 +15,8 @@ namespace WebAPI.Model
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Author name must be between 1 and 100 characters.")]
         public string AuthorName { get; set; } = string.Empty;
 
-        [StringLength(2000, ErrorMessage = "Author description must be at most 2000 characters.")]
+        [StringLength(int.MaxValue)]
         public string? AuthorDescription { get; set; } = string.Empty;
-
-        [StringLength(500, ErrorMessage = "Author image URL must be at most 500 characters.")]
-        public string? AuthorImage { get; set; } = string.Empty;
 
         [StringLength(2000, ErrorMessage = "Author URL must be at most 2000 characters.")]
         public string? AuthorUrl { get; set; } = string.Empty;

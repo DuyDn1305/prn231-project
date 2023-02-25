@@ -18,8 +18,7 @@ namespace WebAPI.Migrations
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AuthorDescription = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    AuthorImage = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    AuthorDescription = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
                     AuthorUrl = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Nation = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
@@ -62,10 +61,13 @@ namespace WebAPI.Migrations
                     BookId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: true),
                     CoverImage = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
+                    PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalPage = table.Column<int>(type: "int", nullable: false),
                     PublisherId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)

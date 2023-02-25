@@ -53,8 +53,6 @@ namespace WebAPI.Database
             {
                 entity.Property(e => e.AuthorDescription).HasMaxLength(500);
 
-                entity.Property(e => e.AuthorImage).HasMaxLength(2000);
-
                 entity.Property(e => e.AuthorName)
                     .IsRequired()
                     .HasMaxLength(100);

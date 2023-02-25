@@ -32,11 +32,7 @@ namespace WebAPI.Migrations
 
                     b.Property<string>("AuthorDescription")
                         .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("AuthorImage")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AuthorName")
                         .IsRequired()
@@ -78,8 +74,14 @@ namespace WebAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasMaxLength(2147483647)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PublisherId")
                         .HasColumnType("int");
@@ -88,6 +90,9 @@ namespace WebAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("TotalPage")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");

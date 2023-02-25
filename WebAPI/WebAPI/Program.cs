@@ -24,18 +24,29 @@ namespace WebAPI
                     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 });
             });
+            builder.Services.AddTransient<Seed>();
             builder.Services.AddDbContext<AppDBContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration["SQL"]);
             });
+            builder.Services.AddScoped<AppDBContext>();
             builder.Services.BuildServiceProvider().GetService<AppDBContext>().Database.Migrate();
-            builder.Services.AddScoped<IBookRepository, BookRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-            builder.Services.AddScoped<IPublisherRepository, PublisherRepository>();
+            builder.Services.AddScoped<BookRepository>();
+            builder.Services.AddScoped<CategoryRepository>();
+            builder.Services.AddScoped<AuthorRepository>();
+            builder.Services.AddScoped<PublisherRepository>();
             WebApplication app = builder.Build();
             Config = app.Configuration;
+            SeedData(app);
 
+            void SeedData(IHost app)
+            {
+                IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+                using IServiceScope? scope = scopedFactory.CreateScope();
+                Seed? service = scope.ServiceProvider.GetService<Seed>();
+                service.SeedDataContext();
+            }
             app.UseCors();
             app.MapControllers();
 

@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Interface;
 using WebAPI.Model;
+using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController : BaseController
     {
-        private readonly IBookRepository _bookRepository;
+        private readonly BookRepository _bookRepository;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(BookRepository bookRepository)
         {
             _bookRepository = bookRepository;
         }
@@ -22,7 +20,7 @@ namespace WebAPI.Controllers
             return Ok(books);
         }
 
-        [HttpGet("id={bookId}")]
+        [HttpGet("{bookId}")]
         [ProducesResponseType(200, Type = typeof(Book))]
         [ProducesResponseType(400)]
         public IActionResult GetBookById(int bookId)
@@ -36,7 +34,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("name={name}")]
+        [HttpGet("{name}")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Book>))]
         [ProducesResponseType(400)]
         public IActionResult GetBookByName(string name)

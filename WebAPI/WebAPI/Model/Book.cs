@@ -15,11 +15,14 @@ namespace WebAPI.Model
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 100 characters.")]
         public string Title { get; set; } = string.Empty;
 
-        [StringLength(2000, ErrorMessage = "Description must be at most 2000 characters.")]
+        [StringLength(int.MaxValue)]
         public string? Description { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Cover image URL must be at most 500 characters.")]
         public string? CoverImage { get; set; } = string.Empty;
+
+        [Required(ErrorMessage ="Price is required.")]
+        public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Category is required.")]
         public int CategoryId { get; set; }
@@ -30,6 +33,11 @@ namespace WebAPI.Model
         public int AuthorId { get; set; }
 
         public Author Author { get; set; }
+
+        public DateTime PublicationDate { get; set; }
+
+        [Required]
+        public int TotalPage { get; set; }
 
         [Required(ErrorMessage = "Publisher is required.")]
         public int PublisherId { get; set; }

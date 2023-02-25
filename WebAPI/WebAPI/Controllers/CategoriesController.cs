@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Interface;
 using WebAPI.Model;
+using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseController
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly CategoryRepository _categoryRepository;
 
-        public CategoriesController(ICategoryRepository categoryRepository)
+        public CategoriesController(CategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
