@@ -9,7 +9,7 @@ function MainLayout({ children } : MainLayoutProps) {
     return (
         <>
             <NavigationBar></NavigationBar>
-            <div className="main_container">{children}</div>
+            <div className="p-8">{children}</div>
         </>
     );
 }

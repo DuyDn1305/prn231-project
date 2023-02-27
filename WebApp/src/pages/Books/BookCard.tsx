@@ -1,27 +1,39 @@
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import { useNavigate } from "react-router-dom";
 
 interface Book {
-    img: string,
-    title: string,
-    description: string,
-    link: string,
-    index: number
+  bookId: number,
+  title: string,
+  description: string,
+  coverImage: string,
+  price: number,
 }
 
-function BookCard( {img, title, description, link, index} :Book ) {
-    console.log(index)
+function BookCard( {bookId, title, description, coverImage, price} : Book ) {
+
+  let navigate = useNavigate(); 
+
+  const routeChange = () =>{ 
+    let path = `${bookId}`; 
+    navigate(path);
+  }
+
   return (
-    <Card style={{ width: '18rem' }} key={index}>
-      <Card.Img variant="top" src={img} />
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>
-            {description}
-        </Card.Text>
-        <Button variant="primary" >Go details</Button>
-      </Card.Body>
-    </Card>
+    <>
+      <div key={bookId} className="relative flex flex-col justify-end min-w-min break-words border border-neutral-400 rounded-t-2xl rounded-b-2xl m-1 max-w-[18rem] center">
+        <img className="rounded-t-2xl rounded-b-2xl w-full h-96" src={coverImage}/>
+          <div className="flex-auto p-4">
+            <div className="font-bold break-words w-64">{title}</div>
+            <p className="font-light italic max-h-[70px] overflow-hidden">{description}</p>
+            <div className="font-bold break-words pt-4 w-64">{price}</div>
+            <button type="button" className="bg-neutral-400 hover:bg-neutral-700 text-white font-bold mt-3 py-2 px-4 rounded-full"
+              onClick={routeChange}
+            >
+              Buy now
+            </button>
+        </div>
+      </div>
+    </>
+    
   );
 }
 

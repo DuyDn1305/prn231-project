@@ -1,47 +1,49 @@
 import BookCard from "./BookCard";
-import "./Book.css";
-import { Row, Col } from "react-bootstrap";
-
-interface Book {
-    img: string,
-    title: string,
-    description: string,
-    link: string
-}
-
-const arrayChunk = (arr: Book[], num: number) => {
-    const array = arr.slice();
-    const chunks = [];
-    while (array.length) chunks.push(array.splice(0, num));
-    return chunks;
-};
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getStudents } from "../../apis/Book.api";
 
 function Book() {
+    const queryClient = useQueryClient();
 
-    const bookInfo = [
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-        {img: "http://", title: "Book Title", description:"Some quick example text to build on the card title and make up the bulk of the card's content.", link: "http://"},
-    ]
-
-    const length = bookInfo.length;
+    const booksQuery = useQuery({
+        queryKey: ['Books'],
+        queryFn: () => {
+          const controller = new AbortController()
+          setTimeout(() => {
+            controller.abort()
+          }, 5000)
+          return getStudents(controller.signal);
+        },
+        keepPreviousData: true,
+        retry: 0
+      })
 
     return ( 
-        <>
-        <div className="book_card_list">
-            {arrayChunk(bookInfo, 5).map((row, i) => (
-                <Row key={i}>
-                    {row.map((colBook, index) => (
-                        <BookCard img={colBook.img} description={colBook.description} title={colBook.title} link={colBook.link} index={index}/>
-                    ))}
-                </Row>
-            ))}
+        <div className="text-center">
+            {booksQuery.isLoading && (
+                <div role='status' className='mt-6 animate-pulse'>
+                <div className='mb-4 h-4  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10 rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='mb-2.5 h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <div className='h-10  rounded bg-gray-200 dark:bg-gray-700' />
+                <span className='sr-only'>Loading...</span>
+                </div>
+            )}
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6 gap-4 pb-2">
+                {booksQuery.data?.data.map((colBook, index) =>(
+                    <BookCard description={colBook.description} title={colBook.title} coverImage={colBook.coverImage} bookId={colBook.bookId} price={colBook.price}/>
+                ))}
+            </div>
         </div>
-        </>
     );
 }
 
