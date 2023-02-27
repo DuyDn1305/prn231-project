@@ -1,21 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getStudent } from "../../../apis/Book.api";
-import { useEffect } from "react";
+import { getBook } from "../../../apis/Book.api";
+
 function BookDetail() {
     let { bookId } = useParams();
 
     const {data} = useQuery({
         queryKey: ['Book'],
         queryFn: () => {
-            return getStudent(bookId);
+            return getBook(bookId);
         },
-        staleTime: 1000
+        staleTime: 5*60*1000
     })
-    useEffect(() => { 
-    }, [bookId]);
-
-    
 
     return (  
         <>

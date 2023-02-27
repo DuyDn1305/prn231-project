@@ -18,7 +18,6 @@ function BookCard( {bookId, title, description, coverImage, price} : Book ) {
   }
 
   return (
-    <>
       <div key={bookId} className="relative flex flex-col justify-end min-w-min break-words border border-neutral-400 rounded-t-2xl rounded-b-2xl m-1 max-w-[18rem] center">
         <img className="rounded-t-2xl rounded-b-2xl w-full h-96" src={coverImage}/>
           <div className="flex-auto p-4">
@@ -32,8 +31,6 @@ function BookCard( {bookId, title, description, coverImage, price} : Book ) {
             </button>
         </div>
       </div>
-    </>
-    
   );
 }
 
