@@ -1,7 +1,6 @@
 using Imagekit;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Database;
-using WebAPI.Interface;
 using WebAPI.Repository;
 
 namespace WebAPI
@@ -29,7 +28,6 @@ namespace WebAPI
             {
                 options.UseSqlServer(builder.Configuration["SQL"]);
             });
-            builder.Services.AddScoped<AppDBContext>();
             builder.Services.BuildServiceProvider().GetService<AppDBContext>().Database.Migrate();
             builder.Services.AddScoped<BookRepository>();
             builder.Services.AddScoped<CategoryRepository>();

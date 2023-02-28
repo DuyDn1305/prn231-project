@@ -1,10 +1,9 @@
 ﻿using WebAPI.Database;
-using WebAPI.Interface;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
 {
-    public class BookRepository : IBookRepository
+    public class BookRepository
     {
         private readonly AppDBContext db;
         public BookRepository(AppDBContext appDbContext)
@@ -30,7 +29,7 @@ namespace WebAPI.Repository
 
         public ICollection<Book> GetBookByName(string name)
         {
-            return db.Book.Where(b => b.Title.ToLower().Contains(name.ToLower())).ToList();
+            return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim())).ToList();
         }
 
         public ICollection<Book> GetBooks()

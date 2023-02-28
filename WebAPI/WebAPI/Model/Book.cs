@@ -11,41 +11,41 @@ namespace WebAPI.Model
         public int BookId { get; set; }
 
         [DisplayName("Book Title")]
-        [Required(ErrorMessage = "Title is required.")]
-        [StringLength(100, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 100 characters.")]
+        [StringLength(100, MinimumLength = 1)]
         public string Title { get; set; } = string.Empty;
 
         [StringLength(int.MaxValue)]
         public string? Description { get; set; } = string.Empty;
 
-        [StringLength(500, ErrorMessage = "Cover image URL must be at most 500 characters.")]
+        [StringLength(500)]
         public string? CoverImage { get; set; } = string.Empty;
 
-        [Required(ErrorMessage ="Price is required.")]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Category is required.")]
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
+        public Category Category { get; set; } = new();
 
-        [Required(ErrorMessage = "Author is required.")]
         public int AuthorId { get; set; }
 
-        public Author Author { get; set; }
+        public Author Author { get; set; } = new();
 
         public DateTime PublicationDate { get; set; }
 
-        [Required]
         public int TotalPage { get; set; }
 
-        [Required(ErrorMessage = "Publisher is required.")]
         public int PublisherId { get; set; }
 
-        public Publisher Publisher { get; set; }
+        public Publisher Publisher { get; set; } = new();
 
         public DateTime? CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
+
+        public ICollection<Vote>? Votes { get; set; }
+
+        public ICollection<Rating>? Ratings { get; set; }
+
+        public ICollection<Bookmark>? Bookmarks { get; set; }
     }
 }

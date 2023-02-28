@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             return Ok(books);
         }
 
-        [HttpGet("{bookId}")]
+        [HttpGet("{bookId:int}")]
         [ProducesResponseType(200, Type = typeof(Book))]
         [ProducesResponseType(400)]
         public IActionResult GetBookById(int bookId)

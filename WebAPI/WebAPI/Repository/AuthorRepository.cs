@@ -1,10 +1,9 @@
 ﻿using WebAPI.Database;
-using WebAPI.Interface;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository
     {
         private readonly AppDBContext db;
         public AuthorRepository(AppDBContext appDbContext)

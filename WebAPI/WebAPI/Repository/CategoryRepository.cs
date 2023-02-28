@@ -1,10 +1,9 @@
 ﻿using WebAPI.Database;
-using WebAPI.Interface;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository
     {
         private readonly AppDBContext db;
         public CategoryRepository(AppDBContext appDbContext)

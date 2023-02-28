@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebAPI.Interface;
 using WebAPI.Model;
 using WebAPI.Repository;
 
