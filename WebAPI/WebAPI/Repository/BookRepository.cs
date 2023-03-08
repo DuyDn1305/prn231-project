@@ -1,4 +1,6 @@
-﻿using WebAPI.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using WebAPI.Database;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
@@ -24,17 +26,22 @@ namespace WebAPI.Repository
 
         public Book GetBookById(int id)
         {
-            return db.Book.FirstOrDefault(b => b.BookId == id) ?? new();
+            return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                            .FirstOrDefault(b => b.BookId == id) ?? new();
         }
 
         public ICollection<Book> GetBookByName(string name)
         {
-            return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim())).ToList();
+            return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
+                            .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                            .ToList();
         }
 
         public ICollection<Book> GetBooks()
         {
-            return db.Book.OrderBy(b => b.Title).ToList();
+            return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                .OrderBy(b => b.Title).ToList()
+                .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
         }
 
         public bool IsBookExits(int id)
