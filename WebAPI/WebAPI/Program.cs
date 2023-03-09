@@ -1,8 +1,11 @@
 using Imagekit;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
 using WebAPI.Database;
 using WebAPI.Repository;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WebAPI
 {
@@ -28,6 +31,20 @@ namespace WebAPI
                     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 });
             });
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = "issuer",
+                        ValidAudience = "audience",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("webAPIProject"))
+                    };
+                });
             builder.Services.AddTransient<Seed>();
             builder.Services.AddDbContext<AppDBContext>(options =>
             {
@@ -52,7 +69,7 @@ namespace WebAPI
             }
             app.UseCors();
             app.MapControllers();
-
+            app.UseAuthentication();
             app.Run();
         }
     }
