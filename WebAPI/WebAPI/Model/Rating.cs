@@ -10,10 +10,10 @@ namespace WebAPI.Model
         public int RateId { get; set; }
 
         public int BookId { get; set; }
-        public Book Book { get; set; }
+        public Book? Book { get; set; }
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [Range(1, 5)]
         public int RatingStar { get; set; }

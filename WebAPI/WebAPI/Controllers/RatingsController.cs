@@ -46,5 +46,27 @@ namespace WebAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("book/{bookId:int}")]
+        [ProducesResponseType(200, Type = typeof(Rating))]
+        [ProducesResponseType(400)]
+        public IActionResult GetRatingsByBookId(int bookId)
+        {
+            if (!_ratingRepository.IsBookExits(bookId))
+            {
+                return NotFound();
+            }
+            ICollection<Rating> ratings = _ratingRepository.GetRatingsByBookId(bookId);
+            return !ModelState.IsValid ? BadRequest(ModelState) : Ok(ratings);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(Rating))]
+        [ProducesResponseType(400)]
+        public IActionResult GetRatings()
+        {
+            ICollection<Rating> ratings = _ratingRepository.GetRatings();
+            return !ModelState.IsValid ? BadRequest(ModelState) : Ok(ratings);
+        }
     }
 }

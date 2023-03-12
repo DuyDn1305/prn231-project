@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using WebAPI.Model;
 using WebAPI.Repository;
 
@@ -21,18 +23,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User model)
+        public async Task<IActionResult> Login(JsonDocument model)
         {
-            User? user = await _userManager.FindByNameAsync(model.UserName);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            Console.WriteLine(model.RootElement);
+            var tmp = model.RootElement.Deserialize<User>(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            User? user = await _userManager.FindByNameAsync(tmp.UserName);
+            if (user != null && await _userManager.CheckPasswordAsync(user, tmp.Password))
             {
                 List<Claim> authClaims = new()
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
-
-                SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")));
 
                 JwtSecurityToken token = new(
                     issuer: _configuration["Jwt:Issuer"],

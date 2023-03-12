@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
 
             if (userExits)
             {
-                ModelState.AddModelError("", "Username already exists");
+                ModelState.AddModelError("isUsernameExist", "Username already exists");
             }
 
             if (!ModelState.IsValid)
@@ -48,6 +48,14 @@ namespace WebAPI.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetRatings()
+        {
+            ICollection<User> users = _userRepository.GetUsers();
+            return !ModelState.IsValid ? BadRequest(ModelState) : Ok(users);
+        }
 
     }
 }

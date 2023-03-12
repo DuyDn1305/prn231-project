@@ -1,4 +1,5 @@
-﻿using WebAPI.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Database;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
@@ -23,7 +24,15 @@ namespace WebAPI.Repository
         }
         public ICollection<Rating> GetRatings()
         {
-            return db.Rating.OrderBy(b => b.RateId).ToList();
+            return db.Rating.Include(r => r.User).Include(r => r.Book).OrderByDescending(b => b.RateId).OrderBy(b => b.RateId).ToList();
+        }
+        public ICollection<Rating> GetRatingsByBookId(int bookId)
+        {
+            return db.Rating.Where(r => r.BookId == bookId).Include(r => r.User).OrderByDescending(b => b.RateId).ToList();
+        }
+        public bool IsBookExits(int id)
+        {
+            return db.Book.Any(b => b.BookId == id);
         }
 
     }

@@ -55,6 +55,9 @@ namespace WebAPI
             builder.Services.AddScoped<CategoryRepository>();
             builder.Services.AddScoped<AuthorRepository>();
             builder.Services.AddScoped<PublisherRepository>();
+            builder.Services.AddScoped<RatingRepository>();
+            builder.Services.AddScoped<UserRepository>();
+
             WebApplication app = builder.Build();
             Config = app.Configuration;
             SeedData(app);

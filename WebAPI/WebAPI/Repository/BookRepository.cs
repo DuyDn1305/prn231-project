@@ -27,6 +27,7 @@ namespace WebAPI.Repository
         public Book GetBookById(int id)
         {
             return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                            .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                             .FirstOrDefault(b => b.BookId == id) ?? new();
         }
 
@@ -34,12 +35,15 @@ namespace WebAPI.Repository
         {
             return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                            .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                             .ToList();
         }
 
         public ICollection<Book> GetBooks()
         {
-            return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+            return db.Book
+                .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                 .OrderBy(b => b.Title).ToList()
                 .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
         }
