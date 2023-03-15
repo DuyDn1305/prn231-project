@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using WebAPI.Model;
 using WebAPI.Repository;
+using Imagekit.Util;
+using System.Net;
 
 namespace WebAPI.Controllers
 {
@@ -82,11 +87,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        public IActionResult CreateBook([FromBody] Book bookCreate)
+        public async Task<IActionResult> CreateBook([FromForm] BookRequest bookRequest)
         {
-            if (bookCreate == null)
+            if (bookRequest == null)
             {
                 return BadRequest(ModelState);
             }
@@ -94,7 +97,7 @@ namespace WebAPI.Controllers
             // Check if a book with the same title already exists
             bool bookExists = _bookRepository.GetBooks()
                  .Any(b => b.Title.Trim()
-                                  .Equals(bookCreate.Title.Trim(), StringComparison.OrdinalIgnoreCase));
+                                  .Equals(bookRequest.Title.Trim(), StringComparison.OrdinalIgnoreCase));
 
             if (bookExists)
             {
@@ -106,7 +109,20 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool bookCreated = _bookRepository.CreateBook(bookCreate);
+
+
+            bool bookCreated = _bookRepository.CreateBook(new()
+            {
+                Title = bookRequest.Title,
+                Description = bookRequest.Description,
+                CoverImage = await Util.Upload(bookRequest.CoverImage),
+                Price  = bookRequest.Price,
+                CategoryId = bookRequest.CategoryId,
+                AuthorId = bookRequest.AuthorId,
+                PublicationDate = bookRequest.PublicationDate,
+                TotalPage = bookRequest.TotalPage,
+                PublisherId = bookRequest.PublisherId,
+        });
 
             if (!bookCreated)
             {
@@ -144,4 +160,23 @@ namespace WebAPI.Controllers
             return NoContent();
         }
     }
+}
+
+public class BookRequest
+{
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+
+    public decimal Price { get; set; }
+    public IFormFile CoverImage { get; set; } = null!;
+
+    public int CategoryId { get; set; }
+
+    public int AuthorId { get; set; }
+
+    public DateTime PublicationDate { get; set; }
+
+    public int TotalPage { get; set; }
+
+    public int PublisherId { get; set; }
 }

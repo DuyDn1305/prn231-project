@@ -57,5 +57,14 @@ namespace WebAPI.Controllers
             return !ModelState.IsValid ? BadRequest(ModelState) : Ok(users);
         }
 
+        [HttpGet("{username}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetUserByUserName(string username)
+        {
+            User? user = await _userRepository.FindByNameAsync(username)!;
+            return !ModelState.IsValid ? BadRequest(ModelState) : Ok(user);
+        }
+
     }
 }

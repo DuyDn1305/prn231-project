@@ -23,6 +23,7 @@
                 fileName = file.FileName,
                 file = fileBytes,
             });
+            Console.WriteLine(res);
             Console.WriteLine($"url={res.url}\npath={res.filePath}\nname={res.name} type={res.fileType}");
             return res.url;
         }

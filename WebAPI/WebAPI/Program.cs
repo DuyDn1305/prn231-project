@@ -13,7 +13,8 @@ namespace WebAPI
     {
         public static IConfiguration Config { get; private set; } = null!;
 
-        public static ImagekitClient Imagekit => new(Config["Imagekit:PublicKey"], Config["Imagekit:PrivateKey"], Config["Imagekit:Url"]);
+        public static ImagekitClient Imagekit { get; private set; }
+
 
         public static void Main(string[] args)
         {
@@ -60,6 +61,9 @@ namespace WebAPI
 
             WebApplication app = builder.Build();
             Config = app.Configuration;
+
+            Imagekit = new(Config["Imagekit:PublicKey"], Config["Imagekit:PrivateKey"], Config["Imagekit:Url"]);
+            
             SeedData(app);
 
             void SeedData(IHost app)
