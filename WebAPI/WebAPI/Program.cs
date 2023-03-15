@@ -1,4 +1,3 @@
-using Imagekit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text.Json.Serialization;
@@ -6,6 +5,7 @@ using WebAPI.Database;
 using WebAPI.Repository;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Imagekit.Sdk;
 
 namespace WebAPI
 {
@@ -13,7 +13,7 @@ namespace WebAPI
     {
         public static IConfiguration Config { get; private set; } = null!;
 
-        public static ServerImagekit Imagekit => new(Program.Config["Imagekit:PublicKey"], Program.Config["Imagekit:PrivateKey"], Program.Config["Imagekit:Url"]);
+        public static ImagekitClient Imagekit => new(Config["Imagekit:PublicKey"], Config["Imagekit:PrivateKey"], Config["Imagekit:Url"]);
 
         public static void Main(string[] args)
         {
