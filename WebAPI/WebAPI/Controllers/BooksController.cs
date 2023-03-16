@@ -12,10 +12,17 @@ namespace WebAPI.Controllers
     public class BooksController : BaseController
     {
         private readonly BookRepository _bookRepository;
+        private readonly AuthorRepository _authorRepository;
+        private readonly CategoryRepository _categoryRepository;
+        private readonly PublisherRepository _publisherRepository;
 
-        public BooksController(BookRepository bookRepository)
+
+        public BooksController(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository)
         {
             _bookRepository = bookRepository;
+            _authorRepository =authorRepository;
+            _categoryRepository =categoryRepository;
+            _publisherRepository =publisherRepository;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,8 +116,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-
-
             bool bookCreated = _bookRepository.CreateBook(new()
             {
                 Title = bookRequest.Title,
@@ -118,10 +123,13 @@ namespace WebAPI.Controllers
                 CoverImage = await Util.Upload(bookRequest.CoverImage),
                 Price  = bookRequest.Price,
                 CategoryId = bookRequest.CategoryId,
+                Category = _categoryRepository.GetCategoryById(bookRequest.CategoryId),
                 AuthorId = bookRequest.AuthorId,
+                Author = _authorRepository.GetAuthorById(bookRequest.AuthorId),
                 PublicationDate = bookRequest.PublicationDate,
                 TotalPage = bookRequest.TotalPage,
                 PublisherId = bookRequest.PublisherId,
+                Publisher = _publisherRepository.GetPublisherById(bookRequest.PublisherId)
         });
 
             if (!bookCreated)

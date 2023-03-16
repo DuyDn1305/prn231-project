@@ -24,11 +24,11 @@ namespace WebAPI.Model
 
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; } = new();
+        public Category? Category { get; set; } = new();
 
         public int AuthorId { get; set; }
 
-        public Author Author { get; set; } = new();
+        public Author? Author { get; set; } = new();
 
         public DateTime PublicationDate { get; set; }
 
@@ -36,7 +36,7 @@ namespace WebAPI.Model
 
         public int PublisherId { get; set; }
 
-        public Publisher Publisher { get; set; } = new();
+        public Publisher? Publisher { get; set; } = new();
 
         public DateTime? CreatedAt { get; set; }
 
