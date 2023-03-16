@@ -22,11 +22,11 @@ namespace WebAPI.Model
 
         public decimal Price { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         public Category? Category { get; set; } = new();
 
-        public int AuthorId { get; set; }
+        public int? AuthorId { get; set; }
 
         public Author? Author { get; set; } = new();
 
@@ -34,7 +34,7 @@ namespace WebAPI.Model
 
         public int TotalPage { get; set; }
 
-        public int PublisherId { get; set; }
+        public int? PublisherId { get; set; }
 
         public Publisher? Publisher { get; set; } = new();
 
