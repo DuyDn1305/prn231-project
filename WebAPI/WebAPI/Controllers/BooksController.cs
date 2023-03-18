@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
 
@@ -22,18 +23,19 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IActionResult GetBooks(int pageSize = 10, string startCursor = null)
         {
-            ICollection<Book> books = _bookRepository.GetBooks(pageSize, startCursor);
-            bool hasNextPage = books.Count == pageSize;
+            ICollection<BookDTO> bookDTOs = _bookRepository.GetBookDTOs(pageSize, startCursor);
+            bool hasNextPage = bookDTOs.Count == pageSize;
 
             // Get the cursor of the last book on the page
-            string? endCursor = books.LastOrDefault()?.BookId.ToString();
+            string? endCursor = bookDTOs.LastOrDefault()?.BookId.ToString();
 
             // Create a result object with the books and pagination info
             var result = new
             {
-                books,
+                books = bookDTOs,
                 pageInfo = new
                 {
+                    count = _bookRepository.BookCount(),
                     hasNextPage,
                     endCursor
                 }
@@ -41,6 +43,7 @@ namespace WebAPI.Controllers
 
             return Ok(result);
         }
+
 
         [HttpGet("count")]
         [ProducesResponseType(StatusCodes.Status200OK)]

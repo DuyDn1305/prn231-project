@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebAPI.Database;
+using WebAPI.Dto;
 using WebAPI.Model;
 
 namespace WebAPI.Repository
@@ -47,26 +48,41 @@ namespace WebAPI.Repository
 
         public ICollection<Book> GetAllBooks()
         {
-            return db.Book
-                .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
-                .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+            var books = db.Book
+                .Include(p => p.Category)
+                .Include(p => p.Author)
+                .Include(p => p.Publisher)
+                .Include(p => p.Ratings)
+                .Include(p => p.Votes)
+                .Include(p => p.Bookmarks)
                 .AsSplitQuery()
-                .OrderBy(b => b.Title).ToList()
-                .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
+                .OrderBy(b => b.Title)
+                .ToList();
+
+            foreach (var book in books)
+            {
+                db.Entry(book.Category).State = EntityState.Detached;
+                book.Category.Books = new List<Book>();
+            }
+
+            return books;
         }
 
-        public ICollection<Book> GetBooks(int pageSize, string startCursor)
+
+        public ICollection<BookDTO> GetBookDTOs(int pageSize, string startCursor)
         {
             IQueryable<Book> query = db.Book
                 .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                 .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                 .AsSplitQuery()
-                .OrderBy(b => b.Title);
+                .OrderBy(b => b.BookId);
 
             if (!string.IsNullOrEmpty(startCursor))
             {
+                int cursor = 0;
                 // Find the book that matches the start cursor
-                Book startBook = db.Book.FirstOrDefault(b => b.BookId.ToString() == startCursor);
+                List<Book> listBook = db.Book.OrderBy(b => b.BookId).ToList();
+                Book startBook = listBook[int.TryParse(startCursor, out cursor) ? cursor-1 : -1];
                 if (startBook != null)
                 {
                     // Materialize the query into a list of books
@@ -82,7 +98,24 @@ namespace WebAPI.Repository
                     // Take the requested number of books
                     bookList = bookList.Take(pageSize).ToList();
 
-                    return bookList;
+                    // Map the books to BookDTOs
+                    var bookDtos = bookList.Select(b => new BookDTO
+                    {
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Description = b.Description,
+                        CoverImage = b.CoverImage,
+                        Price = b.Price,
+                        CategoryName = b.Category.CategoryName,
+                        AuthorName = b.Author.AuthorName,
+                        PublicationDate = b.PublicationDate,
+                        TotalPage = b.TotalPage,
+                        PublisherName = b.Publisher.PublisherName,
+                        CreatedAt = b.CreatedAt,
+                        UpdatedAt = b.UpdatedAt
+                    }).ToList();
+
+                    return bookDtos;
                 }
             }
 
@@ -92,14 +125,27 @@ namespace WebAPI.Repository
             // Materialize the query into a list of books
             List<Book> books = query.ToList();
 
-            // Set the category's books to null to prevent a circular reference
-            foreach (Book book in books)
+            // Map the books to BookDTOs
+            var bookDTOs = books.Select(b => new BookDTO
             {
-                book.Category.Books = null;
-            }
+                BookId = b.BookId,
+                Title = b.Title,
+                Description = b.Description,
+                CoverImage = b.CoverImage,
+                Price = b.Price,
+                CategoryName = b.Category.CategoryName,
+                AuthorName = b.Author.AuthorName,
+                PublicationDate = b.PublicationDate,
+                TotalPage = b.TotalPage,
+                PublisherName = b.Publisher.PublisherName,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt
+            }).ToList();
 
-            return books;
+            return bookDTOs;
         }
+
+
 
 
         public bool IsBookExits(int id)
