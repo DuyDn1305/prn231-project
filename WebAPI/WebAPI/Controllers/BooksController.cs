@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 using WebAPI.Model;
 using WebAPI.Repository;
-using Imagekit.Util;
-using System.Net;
 
 namespace WebAPI.Controllers
 {
@@ -20,16 +15,31 @@ namespace WebAPI.Controllers
         public BooksController(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository)
         {
             _bookRepository = bookRepository;
-            _authorRepository =authorRepository;
-            _categoryRepository =categoryRepository;
-            _publisherRepository =publisherRepository;
+            _authorRepository = authorRepository;
+            _categoryRepository = categoryRepository;
+            _publisherRepository = publisherRepository;
         }
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Book>> GetBooks(int total, int page)
+        public IActionResult GetBooks(int pageSize = 10, string startCursor = null)
         {
-            ICollection<Book> books = _bookRepository.GetBooks(total,page);
-            return Ok(books);
+            ICollection<Book> books = _bookRepository.GetBooks(pageSize, startCursor);
+            bool hasNextPage = books.Count == pageSize;
+
+            // Get the cursor of the last book on the page
+            string? endCursor = books.LastOrDefault()?.BookId.ToString();
+
+            // Create a result object with the books and pagination info
+            var result = new
+            {
+                books,
+                pageInfo = new
+                {
+                    hasNextPage,
+                    endCursor
+                }
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("count")]
@@ -110,7 +120,7 @@ namespace WebAPI.Controllers
             }
 
             // Check if a book with the same title already exists
-            bool bookExists = _bookRepository.GetBooks()
+            bool bookExists = _bookRepository.GetAllBooks()
                  .Any(b => b.Title.Trim()
                                   .Equals(bookRequest.Title.Trim(), StringComparison.OrdinalIgnoreCase));
 
@@ -129,7 +139,7 @@ namespace WebAPI.Controllers
                 Title = bookRequest.Title,
                 Description = bookRequest.Description,
                 CoverImage = await Util.Upload(bookRequest.CoverImage),
-                Price  = bookRequest.Price,
+                Price = bookRequest.Price,
                 CategoryId = bookRequest.CategoryId,
                 Category = _categoryRepository.GetCategoryById(bookRequest.CategoryId),
                 AuthorId = bookRequest.AuthorId,
@@ -138,7 +148,7 @@ namespace WebAPI.Controllers
                 TotalPage = bookRequest.TotalPage,
                 PublisherId = bookRequest.PublisherId,
                 Publisher = _publisherRepository.GetPublisherById(bookRequest.PublisherId)
-        });
+            });
 
             if (!bookCreated)
             {

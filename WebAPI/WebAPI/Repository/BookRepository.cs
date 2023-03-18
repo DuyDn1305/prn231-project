@@ -45,32 +45,62 @@ namespace WebAPI.Repository
             return db.Book.Count();
         }
 
-        public ICollection<Book> GetBooks(int total = 0, int page = 1)
+        public ICollection<Book> GetAllBooks()
         {
-            if (total == 0)
-            {
-                return db.Book
+            return db.Book
                 .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                 .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                 .AsSplitQuery()
                 .OrderBy(b => b.Title).ToList()
                 .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
-            }
-            else 
-            {
-                int position = total * (page - 1);
-                Console.WriteLine(position);
-                return db.Book
-                    .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
-                    .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
-                    .AsSplitQuery()
-                    .OrderBy(b => b.Title).ToList()
-                    .Select(c => { c.Category.Books = new List<Book>(); return c; })
-                    .Skip(position)
-                    .Take(total)
-                    .ToList();
-            }
         }
+
+        public ICollection<Book> GetBooks(int pageSize, string startCursor)
+        {
+            IQueryable<Book> query = db.Book
+                .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+                .AsSplitQuery()
+                .OrderBy(b => b.Title);
+
+            if (!string.IsNullOrEmpty(startCursor))
+            {
+                // Find the book that matches the start cursor
+                Book startBook = db.Book.FirstOrDefault(b => b.BookId.ToString() == startCursor);
+                if (startBook != null)
+                {
+                    // Materialize the query into a list of books
+                    List<Book> bookList = query.ToList();
+
+                    // Skip books until we find the start cursor
+                    int startIndex = bookList.FindIndex(b => b.BookId == startBook.BookId);
+                    if (startIndex >= 0)
+                    {
+                        bookList = bookList.Skip(startIndex).ToList();
+                    }
+
+                    // Take the requested number of books
+                    bookList = bookList.Take(pageSize).ToList();
+
+                    return bookList;
+                }
+            }
+
+            // Take the requested number of books
+            query = query.Take(pageSize);
+
+            // Materialize the query into a list of books
+            List<Book> books = query.ToList();
+
+            // Set the category's books to null to prevent a circular reference
+            foreach (Book book in books)
+            {
+                book.Category.Books = null;
+            }
+
+            return books;
+        }
+
 
         public bool IsBookExits(int id)
         {
