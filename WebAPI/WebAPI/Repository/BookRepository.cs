@@ -40,6 +40,11 @@ namespace WebAPI.Repository
                             .ToList();
         }
 
+        public int BookCount()
+        {
+            return db.Book.Count();
+        }
+
         public ICollection<Book> GetBooks(int total = 0, int page = 1)
         {
             if (total == 0)
@@ -51,7 +56,7 @@ namespace WebAPI.Repository
                 .OrderBy(b => b.Title).ToList()
                 .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
             }
-            else
+            else 
             {
                 int position = total * (page - 1);
                 Console.WriteLine(position);

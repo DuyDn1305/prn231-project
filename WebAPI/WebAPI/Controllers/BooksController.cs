@@ -32,6 +32,14 @@ namespace WebAPI.Controllers
             return Ok(books);
         }
 
+        [HttpGet("count")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<int> BookCount()
+        {
+            int count = _bookRepository.BookCount();
+            return Ok(count);
+        }
+
         [HttpGet("{bookId:int}")]
         [ProducesResponseType(200, Type = typeof(Book))]
         [ProducesResponseType(400)]
