@@ -26,9 +26,9 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Book>> GetBooks()
+        public ActionResult<IEnumerable<Book>> GetBooks(int total, int page)
         {
-            ICollection<Book> books = _bookRepository.GetBooks();
+            ICollection<Book> books = _bookRepository.GetBooks(total,page);
             return Ok(books);
         }
 

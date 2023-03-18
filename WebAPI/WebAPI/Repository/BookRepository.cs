@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using WebAPI.Database;
 using WebAPI.Model;
 
@@ -28,6 +27,7 @@ namespace WebAPI.Repository
         {
             return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+                            .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
         }
 
@@ -36,16 +36,35 @@ namespace WebAPI.Repository
             return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+                            .AsSplitQuery()
                             .ToList();
         }
 
-        public ICollection<Book> GetBooks()
+        public ICollection<Book> GetBooks(int total = 0, int page = 1)
         {
-            return db.Book
+            if (total == 0)
+            {
+                return db.Book
                 .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                 .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+                .AsSplitQuery()
                 .OrderBy(b => b.Title).ToList()
                 .Select(c => { c.Category.Books = new List<Book>(); return c; }).ToList();
+            }
+            else
+            {
+                int position = total * (page - 1);
+                Console.WriteLine(position);
+                return db.Book
+                    .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                    .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
+                    .AsSplitQuery()
+                    .OrderBy(b => b.Title).ToList()
+                    .Select(c => { c.Category.Books = new List<Book>(); return c; })
+                    .Skip(position)
+                    .Take(total)
+                    .ToList();
+            }
         }
 
         public bool IsBookExits(int id)
