@@ -34,7 +34,7 @@ namespace WebAPI.Repository
 
         public async Task<bool> CheckPasswordAsync(User user, string password)
         {
-            bool result = user.Password == password;
+            bool result = BCrypt.Net.BCrypt.Verify(password, user.Password);
             return await Task.FromResult(result);
         }
 

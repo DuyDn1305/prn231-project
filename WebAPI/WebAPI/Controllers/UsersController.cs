@@ -37,6 +37,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
+            UserCreate.Password = BCrypt.Net.BCrypt.HashPassword(UserCreate.Password);
             bool userCreated = _userRepository.CreateUser(UserCreate);
 
             if (!userCreated)
