@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 using WebAPI.Database;
 using WebAPI.Dto;
 using WebAPI.Model;
@@ -24,12 +25,34 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public Book GetBookById(int id)
+        public BookDTO GetBookById(int id)
         {
-            return db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+            var book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.Bookmarks)
                             .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
+            var bookDtos = new BookDTO
+            {
+                BookId = book.BookId,
+                Title = book.Title,
+                Description = book.Description,
+                CoverImage = book.CoverImage,
+                Price = book.Price,
+                CategoryId = book.CategoryId,
+                CategoryName = book.Category.CategoryName,
+                AuthorId = book.AuthorId,
+                AuthorDescription = book.Author.AuthorDescription,
+                AuthorUrl = book.Author.AuthorUrl,
+                AuthorName = book.Author.AuthorName,
+                PublisherId = book.PublisherId,
+                PublicationDate = book.PublicationDate,
+                PublisherUrl = book.Publisher.PublisherUrl,
+                TotalPage = book.TotalPage,
+                PublisherName = book.Publisher.PublisherName,
+                CreatedAt = book.CreatedAt,
+                UpdatedAt = book.UpdatedAt
+            };
+            return bookDtos;
         }
 
         public ICollection<Book> GetBookByName(string name)

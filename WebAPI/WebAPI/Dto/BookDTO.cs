@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using WebAPI.Model;
-
-namespace WebAPI.Dto
+﻿namespace WebAPI.Dto
 {
     public class BookDTO
     {
@@ -17,13 +12,27 @@ namespace WebAPI.Dto
 
         public decimal Price { get; set; }
 
+        public int? CategoryId { get; set; }
+
         public string CategoryName { get; set; } = string.Empty;
+
+        public int? AuthorId { get; set; }
+
+        public string? AuthorDescription { get; set; } = string.Empty;
+
+        public string? AuthorUrl { get; set; } = string.Empty;
+
+        public string? Nation { get; set; } = string.Empty;
 
         public string AuthorName { get; set; } = string.Empty;
 
         public DateTime PublicationDate { get; set; }
 
         public int TotalPage { get; set; }
+
+        public int? PublisherId { get; set; }
+
+        public string? PublisherUrl { get; set; } = string.Empty;
 
         public string PublisherName { get; set; } = string.Empty;
 

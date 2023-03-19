@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
             {
                 return NotFound();
             }
-            Book book = _bookRepository.GetBookById(bookId);
+            BookDTO book = _bookRepository.GetBookById(bookId);
             return !ModelState.IsValid ? BadRequest(ModelState) : Ok(book);
         }
 
@@ -174,14 +174,22 @@ namespace WebAPI.Controllers
                 return NotFound();
             }
 
-            Book deleteBook = _bookRepository.GetBookById(bookId);
+            BookDTO deleteBook = _bookRepository.GetBookById(bookId);
+            ICollection<Book> books = _bookRepository.GetAllBooks();
+            Book selectedBook = books.FirstOrDefault(b => b.BookId == deleteBook.BookId);
+
+            if (selectedBook == null)
+            {
+                ModelState.AddModelError("", "Something went wrong deleting book");
+                return BadRequest(ModelState);
+            }
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (!_bookRepository.DeleteBook(deleteBook))
+            if (!_bookRepository.DeleteBook(selectedBook))
             {
                 ModelState.AddModelError("", "Something went wrong deleting book");
             }
