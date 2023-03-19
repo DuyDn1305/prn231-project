@@ -1,69 +1,129 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { getUser, login } from "../../apis/User.api";
+import { notifyDefault, notifyError } from "../../components/Notification";
 
 function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  let username = useRef("");
+  let password = useRef("");
 
-    const handleNavigateToSignUp = () => {
-        navigate("/signup");
+  const handleNavigateToSignUp = () => {
+    navigate("/signup");
+  };
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      return login({
+        userId: 0,
+        userName: username.current,
+        password: password.current,
+        email: "",
+        phone: "",
+        bookmarks: [],
+        ratings: [],
+        votes: []
+      });
+    },
+    onError: () => {
+      notifyError("Login fail!");
     }
+  });
 
-    return ( 
-        <div className="relative flex flex-col justify-center min-h-[60vh] overflow-hidden">
-            <div className="w-full p-6 m-auto bg-white rounded-md shadow-xl shadow-rose-600/40 ring ring-purple-600 lg:max-w-xl">
-                <h1 className="text-3xl font-bold text-center text-purple-700 uppercase">
-                   Sign in
-                </h1>
-                <form className="mt-6">
-                    <div className="mb-2">
-                        <label
-                            htmlFor="username"
-                            className="block text-sm font-semibold text-gray-800"
-                        >
-                            Username
-                        </label>
-                        <input
-                            type="username"
-                            className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                        />
-                    </div>
-                    <div className="mb-2">
-                        <label
-                            htmlFor="password"
-                            className="block text-sm font-semibold text-gray-800"
-                        >
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
-                        />
-                    </div>
-                    <a
-                        href="#"
-                        className="text-xs text-purple-600 hover:underline"
-                    >
-                        Forget Password?
-                    </a>
-                    <div className="mt-6">
-                        <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
-                            Login
-                        </button>
-                    </div>
-                </form>
+  const { data, refetch, error, isSuccess } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => {
+      return getUser(username.current);
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled: false
+  });
 
-                <p className="mt-8 text-xs font-light text-center text-gray-700">
-                    {" "}
-                    Don't have an account?{" "}
-                    <span 
-                        className="font-medium text-purple-600 hover:underline hover:cursor-pointer"
-                        onClick={handleNavigateToSignUp}
-                    >
-                        Sign up
-                    </span>
-                </p>
-            </div>
-        </div>
-        );
+  const handleLogin = (e: React.ChangeEvent<EventTarget>) => {
+    e.preventDefault();
+    mutation.mutate();
+    refetch();
+  };
+
+  if (mutation.isSuccess && isSuccess) {
+    localStorage["token"] = mutation.data.data.token;
+    localStorage["expiration"] = mutation.data.data.expiration;
+    localStorage["username"] = username.current;
+    localStorage["userId"] = data.data.userId;
+
+    notifyDefault("Login success!");
+    navigate("/");
+  }
+
+  return (
+    <div className="animate__animated animate__bounceInLeft relative flex min-h-[60vh] flex-col justify-center overflow-hidden">
+      <div className="m-auto w-full rounded-md bg-white p-6 shadow-xl shadow-rose-600/40 ring ring-purple-600 lg:max-w-xl">
+        <h1 className="text-center text-3xl font-bold uppercase text-purple-700">
+          Sign in
+        </h1>
+        {mutation.isError && mutation.error instanceof Error ? (
+          mutation.error.message == "Request failed with status code 401" ? (
+            <h4 className="animate__animated animate__flash text-center text-xl font-bold text-red-500">
+              Wrong username or password
+            </h4>
+          ) : null
+        ) : null}
+        <form className="mt-6">
+          <div className="mb-2">
+            <label
+              htmlFor="username"
+              className="block text-sm font-semibold text-gray-800"
+            >
+              Username
+            </label>
+            <input
+              onChange={(e) => (username.current = e.target.value)}
+              type="username"
+              className="mt-2 block w-full rounded-md border bg-white px-4 py-2 text-purple-700 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 focus:ring-opacity-40"
+            />
+          </div>
+          <div className="mb-2">
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-gray-800"
+            >
+              Password
+            </label>
+            <input
+              onChange={(e) => (password.current = e.target.value)}
+              type="password"
+              className="mt-2 block w-full rounded-md border bg-white px-4 py-2 text-purple-700 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 focus:ring-opacity-40"
+            />
+          </div>
+          <a href="#" className="text-xs text-purple-600 hover:underline">
+            Forget Password?
+          </a>
+          <div className="mt-6">
+            <button
+              className="w-full transform rounded-md bg-purple-700 px-4 py-2 tracking-wide text-white transition-colors duration-200 hover:bg-purple-600 focus:bg-purple-600 focus:outline-none"
+              onClick={handleLogin}
+            >
+              Login
+            </button>
+          </div>
+        </form>
+
+        <p className="mt-8 text-center text-xs font-light text-gray-700">
+          {" "}
+          Don't have an account?{" "}
+          <span
+            className="font-medium text-purple-600 hover:cursor-pointer hover:underline"
+            onClick={handleNavigateToSignUp}
+          >
+            Sign up
+          </span>
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default Login;

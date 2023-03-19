@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  svg {
+    display: initial;
+  }
+}
+
+@layer utilities {
+  .bg-gradient {
+    background: linear-gradient(to bottom right, rgba(88, 28, 135, 0.8), white);
+  }
+
+  .bg-gradient-swap {
+    background: linear-gradient(
+      to bottom right,
+      white,
+      rgba(255, 255, 255, 0.85)
+    );
+  }
+
+  .text-gradient-pink-yellow {
+    background: linear-gradient(
+      to bottom right,
+      rgb(255, 0, 255),
+      rgb(255, 255, 0)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-green-blue {
+    background: linear-gradient(
+      to bottom right,
+      rgb(0, 255, 21),
+      rgb(0, 234, 255)
+    );
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

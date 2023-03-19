@@ -1,17 +1,29 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import MainRoutes from './routes'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
-const queryClient = new QueryClient()
+import "react-toastify/dist/ReactToastify.css";
+
+import MainRoutes from "./routes";
+
+export const queryClient = new QueryClient();
+queryClient.invalidateQueries({ queryKey: ["Ratings/Book"] });
+queryClient.invalidateQueries({ queryKey: ["authors", "all"] });
+queryClient.invalidateQueries({ queryKey: ["publishers", "all"] });
+queryClient.invalidateQueries({ queryKey: ["categories", "all"] });
+queryClient.invalidateQueries({ queryKey: ["books", "pagination"] });
+queryClient.invalidateQueries({ queryKey: ["books/count"] });
 
 function App() {
-
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <MainRoutes></MainRoutes>
-      </QueryClientProvider>
-   </>
-  )
+      <div>
+        <QueryClientProvider client={queryClient}>
+          <MainRoutes></MainRoutes>
+        </QueryClientProvider>
+        <ToastContainer />
+      </div>
+    </>
+  );
 }
 
-export default App
+export default App;
