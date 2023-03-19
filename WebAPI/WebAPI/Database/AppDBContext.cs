@@ -14,7 +14,6 @@ namespace WebAPI.Database
         public DbSet<User> User { get; set; }
         public DbSet<Rating> Rating { get; set; }
         public DbSet<Vote> Vote { get; set; }
-        public DbSet<Bookmark> Bookmark { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -73,10 +72,6 @@ namespace WebAPI.Database
                 entity.HasMany(b => b.Ratings)
                     .WithOne(r => r.Book)
                     .HasForeignKey(r => r.BookId);
-
-                entity.HasMany(b => b.Bookmarks)
-                    .WithOne(bm => bm.Book)
-                    .HasForeignKey(bm => bm.BookId);
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -131,10 +126,6 @@ namespace WebAPI.Database
                     .HasMaxLength(20);
 
                 // Set relationships
-                entity.HasMany(u => u.Bookmarks)
-                    .WithOne(b => b.User)
-                    .HasForeignKey(b => b.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(u => u.Ratings)
                     .WithOne(r => r.User)
@@ -145,24 +136,6 @@ namespace WebAPI.Database
                     .WithOne(v => v.User)
                     .HasForeignKey(v => v.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<Bookmark>(entity =>
-            {
-                entity.HasKey(b => b.BookmarkId);
-
-                entity.HasOne(b => b.Book)
-                    .WithMany(b => b.Bookmarks)
-                    .HasForeignKey(b => b.BookId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(b => b.User)
-                    .WithMany(u => u.Bookmarks)
-                    .HasForeignKey(b => b.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.Property(b => b.Description)
-                    .HasMaxLength(3000);
             });
 
             modelBuilder.Entity<Vote>(entity =>

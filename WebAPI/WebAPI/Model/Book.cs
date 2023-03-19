@@ -45,7 +45,5 @@ namespace WebAPI.Model
         public ICollection<Vote>? Votes { get; set; }
 
         public ICollection<Rating>? Ratings { get; set; }
-
-        public ICollection<Bookmark>? Bookmarks { get; set; }
     }
 }
