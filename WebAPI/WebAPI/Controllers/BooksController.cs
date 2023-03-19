@@ -72,7 +72,7 @@ namespace WebAPI.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetBookByName(string name)
         {
-            ICollection<Book> books = _bookRepository.GetBookByName(name);
+            ICollection<BookDTO> books = _bookRepository.GetBookByName(name);
             return !ModelState.IsValid ? BadRequest(ModelState) : Ok(books);
         }
 

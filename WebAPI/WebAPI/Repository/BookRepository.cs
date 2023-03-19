@@ -3,6 +3,7 @@ using System.Reflection.Metadata;
 using WebAPI.Database;
 using WebAPI.Dto;
 using WebAPI.Model;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace WebAPI.Repository
 {
@@ -55,13 +56,41 @@ namespace WebAPI.Repository
             return bookDtos;
         }
 
-        public ICollection<Book> GetBookByName(string name)
+        public ICollection<BookDTO> GetBookByName(string name)
         {
-            return db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
+            var books =  db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes)
                             .AsSplitQuery()
                             .ToList();
+            foreach (var book in books)
+            {
+                db.Entry(book.Category).State = EntityState.Detached;
+                book.Category.Books = new List<Book>();
+            }
+
+            var bookDtos = books.Select(b => new BookDTO
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Description = b.Description,
+                CoverImage = b.CoverImage,
+                Price = b.Price,
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.CategoryName,
+                AuthorId = b.AuthorId,
+                AuthorName = b.Author.AuthorName,
+                AuthorDescription = b.Author.AuthorDescription,
+                AuthorUrl = b.Author.AuthorUrl,
+                PublicationDate = b.PublicationDate,
+                TotalPage = b.TotalPage,
+                PublisherId= b.PublisherId,
+                PublisherName = b.Publisher.PublisherName,
+                PublisherUrl = b.Publisher.PublisherUrl,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt
+            }).ToList();
+            return bookDtos;
         }
 
         public int BookCount()
