@@ -84,7 +84,7 @@ namespace WebAPI.Database
                 new User
                 {
                     UserName = "Admin",
-                    Password = "123456",
+                    Password = "$2a$12$lgeg4z5OraZm1uocXJfuh.axdxusDkwGprMQXwyVI4KdXKcneWQTK",
                     Email = "Admin@gmail.com",
                     Phone = "0123456789"
 
@@ -92,7 +92,7 @@ namespace WebAPI.Database
                     new User
                 {
                     UserName = "Test",
-                    Password = "123456",
+                    Password = "$2a$12$lgeg4z5OraZm1uocXJfuh.axdxusDkwGprMQXwyVI4KdXKcneWQTK",
                     Email = "Test@gmail.com",
                     Phone = "0987654321"
                 }

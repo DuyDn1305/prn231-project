@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet("{name}")]
+        [HttpGet("search")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Book>))]
         [ProducesResponseType(400)]
         public IActionResult GetBookByName(string name)
