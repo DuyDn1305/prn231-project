@@ -87,6 +87,21 @@ namespace WebAPI.Controllers
             return Ok(books);
         }
 
+        [HttpGet("user/{username}/{bookname}")]
+        public ActionResult<IEnumerable<Book>> GetBooksByGivenUsername(string username,string bookname)
+        {
+            if (string.IsNullOrEmpty(username)|| string.IsNullOrEmpty(bookname))
+            {
+                return BadRequest();
+            }
+            ICollection<Book> books = _bookRepository.GetBookByUsernameWithUser(bookname,username);
+            if (books == null)
+            {
+                ModelState.AddModelError("", "Could not find book with the given username");
+            }
+            return Ok(books);
+        }
+
 
         [HttpPut("{bookId}")]
         [ProducesResponseType(400)]

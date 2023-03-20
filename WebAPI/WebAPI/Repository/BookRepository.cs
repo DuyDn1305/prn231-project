@@ -217,5 +217,14 @@ namespace WebAPI.Repository
                           .SelectMany(u => u.Books)
                           .ToList();
         }
+
+        public ICollection<Book> GetBookByUsernameWithUser(string bookname, string username) {
+            var selectedUser = db.User.Include(u=>u.Books).FirstOrDefault(u => u.UserName == username);
+            if (selectedUser == null)
+            {
+                return null;
+            }
+            return selectedUser.Books.Where(b => b.Title.ToLower().Trim().Contains(bookname.ToLower().Trim())).ToList();
+        }
     }
 }
