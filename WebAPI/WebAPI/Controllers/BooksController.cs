@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
@@ -74,6 +75,13 @@ namespace WebAPI.Controllers
         {
             ICollection<BookDTO> books = _bookRepository.GetBookByName(name);
             return !ModelState.IsValid ? BadRequest(ModelState) : Ok(books);
+        }
+
+        [HttpGet("user/{username}")]
+        public ActionResult<IEnumerable<Book>> GetBooksByUsername(string username)
+        {
+            var books = _bookRepository.GetBookByUsername(username);
+            return Ok(books);
         }
 
 

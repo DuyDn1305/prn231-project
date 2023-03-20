@@ -42,6 +42,9 @@ namespace WebAPI.Model
 
         public DateTime? UpdatedAt { get; set; }
 
+        public int? UserId { get; set; }
+        public User? User { get; set; }
+
         public ICollection<Vote>? Votes { get; set; }
 
         public ICollection<Rating>? Ratings { get; set; }

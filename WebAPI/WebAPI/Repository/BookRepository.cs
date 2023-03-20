@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 using WebAPI.Database;
 using WebAPI.Dto;
 using WebAPI.Model;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace WebAPI.Repository
 {
@@ -28,11 +26,11 @@ namespace WebAPI.Repository
 
         public BookDTO GetBookById(int id)
         {
-            var book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+            Book book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes)
                             .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
-            var bookDtos = new BookDTO
+            BookDTO bookDtos = new()
             {
                 BookId = book.BookId,
                 Title = book.Title,
@@ -58,18 +56,18 @@ namespace WebAPI.Repository
 
         public ICollection<BookDTO> GetBookByName(string name)
         {
-            var books =  db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
+            List<Book> books = db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes)
                             .AsSplitQuery()
                             .ToList();
-            foreach (var book in books)
+            foreach (Book? book in books)
             {
                 db.Entry(book.Category).State = EntityState.Detached;
                 book.Category.Books = new List<Book>();
             }
 
-            var bookDtos = books.Select(b => new BookDTO
+            List<BookDTO> bookDtos = books.Select(b => new BookDTO
             {
                 BookId = b.BookId,
                 Title = b.Title,
@@ -84,7 +82,7 @@ namespace WebAPI.Repository
                 AuthorUrl = b.Author.AuthorUrl,
                 PublicationDate = b.PublicationDate,
                 TotalPage = b.TotalPage,
-                PublisherId= b.PublisherId,
+                PublisherId = b.PublisherId,
                 PublisherName = b.Publisher.PublisherName,
                 PublisherUrl = b.Publisher.PublisherUrl,
                 CreatedAt = b.CreatedAt,
@@ -100,7 +98,7 @@ namespace WebAPI.Repository
 
         public ICollection<Book> GetAllBooks()
         {
-            var books = db.Book
+            List<Book> books = db.Book
                 .Include(p => p.Category)
                 .Include(p => p.Author)
                 .Include(p => p.Publisher)
@@ -110,7 +108,7 @@ namespace WebAPI.Repository
                 .OrderBy(b => b.Title)
                 .ToList();
 
-            foreach (var book in books)
+            foreach (Book? book in books)
             {
                 db.Entry(book.Category).State = EntityState.Detached;
                 book.Category.Books = new List<Book>();
@@ -128,10 +126,9 @@ namespace WebAPI.Repository
 
             if (!string.IsNullOrEmpty(startCursor))
             {
-                int cursor = 0;
                 // Find the book that matches the start cursor
                 List<Book> listBook = db.Book.OrderBy(b => b.BookId).ToList();
-                Book startBook = listBook[int.TryParse(startCursor, out cursor) ? cursor-1 : -1];
+                Book startBook = listBook[int.TryParse(startCursor, out int cursor) ? cursor - 1 : -1];
                 if (startBook != null)
                 {
                     // Materialize the query into a list of books
@@ -148,7 +145,7 @@ namespace WebAPI.Repository
                     bookList = bookList.Take(pageSize).ToList();
 
                     // Map the books to BookDTOs
-                    var bookDtos = bookList.Select(b => new BookDTO
+                    List<BookDTO> bookDtos = bookList.Select(b => new BookDTO
                     {
                         BookId = b.BookId,
                         Title = b.Title,
@@ -175,7 +172,7 @@ namespace WebAPI.Repository
             List<Book> books = query.ToList();
 
             // Map the books to BookDTOs
-            var bookDTOs = books.Select(b => new BookDTO
+            List<BookDTO> bookDTOs = books.Select(b => new BookDTO
             {
                 BookId = b.BookId,
                 Title = b.Title,
@@ -212,6 +209,11 @@ namespace WebAPI.Repository
         {
             db.Update(book);
             return Save();
+        }
+
+        public ICollection<Book> GetBookByUsername(string? username)
+        {
+            return db.User.Where(u => u.UserName == username).SelectMany(u => u.Books).ToList();
         }
     }
 }

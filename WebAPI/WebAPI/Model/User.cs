@@ -21,6 +21,8 @@ namespace WebAPI.Model
         [StringLength(20)]
         public string? Phone { get; set; }
 
+        public ICollection<Book>? Books { get; set; }
+
         public ICollection<Rating>? Ratings { get; set; }
 
         public ICollection<Vote>? Votes { get; set; }

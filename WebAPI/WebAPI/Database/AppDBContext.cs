@@ -59,6 +59,11 @@ namespace WebAPI.Database
                     .HasForeignKey(b => b.PublisherId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                entity.HasOne(b => b.User)
+                    .WithMany(p => p.Books)
+                    .HasForeignKey(b => b.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
                 entity.Property(b => b.CreatedAt)
                     .HasColumnType("datetime");
 

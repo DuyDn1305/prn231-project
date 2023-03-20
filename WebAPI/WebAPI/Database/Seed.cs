@@ -79,96 +79,7 @@ namespace WebAPI.Database
             db.Publisher.AddRange(publishers);
             db.SaveChanges();
 
-            // Seed books
-            List<Book> books = new()
-            {
-                new Book {
-                    Title = "To Kill a Mockingbird",
-                    Description = "\"To Kill a Mockingbird\" is a novel by Harper Lee that takes place in the small town of Maycomb, Alabama during the 1930s. The story is told through the eyes of a young girl named Scout Finch, who lives with her older brother Jem and their widowed father, Atticus. The novel follows Scout and Jem as they navigate their way through the racial and social injustices of their town, including their father's decision to defend a black man named Tom Robinson who has been accused of raping a white woman.",
-                    CategoryId = categories[1].CategoryId,
-                    Category = categories[1],
-                    AuthorId = authors[2].AuthorId,
-                    Author = authors[2],
-                    PublisherId = publishers[3].PublisherId,
-                    Publisher = publishers[3],
-                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/To_Kill_a_Mockingbird__first_edition_cover_.jpg?updatedAt=1678868153319",
-                    Price = 159000,
-                    PublicationDate = DateTime.Parse("1960/07/11"),
-                    TotalPage = 281,
-                    CreatedAt = DateTime.Parse("2023/02/23"),
-                    UpdatedAt = DateTime.Parse("2023/02/23")
-                },
-                new Book {
-                    Title = "The Catcher in the Rye",
-                    Description = "The Catcher in the Rye is an American novel by J. D. Salinger that was partially published in serial form from 1945–46 before being novelized in 1951. Originally intended for adults, it is often read by adolescents for its themes of angst and alienation, and as a critique of superficiality in society. The novel also deals with complex issues of innocence, identity, belonging, loss, connection, sex, and depression. The main character, Holden Caulfield, has become an icon for teenage rebellion. Caulfield, nearly of age, gives his opinion on just about everything as he narrates his recent life events.",
-                    CategoryId = categories[1].CategoryId,
-                    Category = categories[1],
-                    AuthorId = authors[3].AuthorId,
-                    Author = authors[3],
-                    PublisherId = publishers[2].PublisherId,
-                    Publisher = publishers[2],
-                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/640px-The_Catcher_in_the_Rye__1951__first_edition_cover_.jpg?updatedAt=1678867114675",
-                    Price = 153000,
-                    PublicationDate = DateTime.Parse("1951/7/16"),
-                    TotalPage = 234,
-                    CreatedAt = DateTime.Parse("2023/02/23"),
-                    UpdatedAt = DateTime.Parse("2023/02/23")
-                },
-                new Book {
-                    Title = "Càng bình tĩnh, càng hạnh phúc",
-                    Description = "Cuốn sách số 7 với bìa sách tông màu tím cùng hoa diên vỹ mang thông điệp về sự bình tĩnh, an yên và hạnh phúc. Quy tụ 70 câu chuyện xoay quanh chủ đề tình yêu, hôn nhân, gia đình, sự nghiệp,.. Đấy là những câu chuyện của chính tác giả, của bạn bè, người thân xung quanh. Mình vẫn luôn đánh giá cao điều này ở tất cả các tác phẩm của Vãn Tình. Vì không chỉ mình, mà tất cả độc giả sẽ dễ dàng cảm nhận cũng như bắt gặp câu chuyện bản thân. Với một thông điệp truyền tải: Hy vọng giúp các cô gái trưởng thành, độc lập và tự tin hơn, tìm lại bản ngã và sống cuộc đời mà mình mong muốn.",
-                    CategoryId = categories[0].CategoryId,
-                    Category = categories[0],
-                    AuthorId = authors[1].AuthorId,
-                    Author = authors[1],
-                    PublisherId = publishers[0].PublisherId,
-                    Publisher = publishers[0],
-                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/cangbinhtinhcanghanhphuc_saysach-5_o9tRXdkUL.jpg?updatedAt=1679137339703",
-                    Price = 95000,
-                    PublicationDate = DateTime.Parse("2022/10/10"),
-                    TotalPage = 352,
-                    CreatedAt = DateTime.Parse("2023/02/23"),
-                    UpdatedAt = DateTime.Parse("2023/02/23")
-                },
-                new Book {
-                    Title = "Là Một Người Con Gái Gai Góc Cũng Có Thể Sưởi Ấm Cả Thế Gian",
-                    Description = "Là một người con gái gai góc cũng có thể sưởi ấm cả thế gian gồm 7 chương sách, nội dung xoay quanh những vấn đề của chính tác giả, từ cuộc sống đến tình yêu, gia đình và có cả công việc. Thông điệp mà cuốn sách muốn gửi đến độc giả đó là sinh ra là con gái chúng ta thường bị xã hội định kiến và gắn mác yếu đuối thế nhưng không vì đó mà chúng ta ngại không dám thay đổi bản thân, không dám theo đuổi ước mơ. Dù có là cô gái mạnh mẽ hay yếu đuối thì bạn xứng đáng được yêu thương và trân trọng.",
-                    CategoryId = categories[0].CategoryId,
-                    Category = categories[0],
-                    AuthorId = authors[0].AuthorId,
-                    Author = authors[0],
-                    PublisherId = publishers[1].PublisherId,
-                    Publisher = publishers[1],
-                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/image-20210122093912-2_pWPU3RAsv.jpg?updatedAt=1679137339913",
-                    Price = 102000,
-                    PublicationDate = DateTime.Parse("2020/11/12"),
-                    TotalPage = 340,
-                    CreatedAt = DateTime.Parse("2023/02/23"),
-                    UpdatedAt = DateTime.Parse("2023/02/23")
-                },
-                new Book {
-                    Title = "The Great Gatsby",
-                    Description = "\"The Great Gatsby\" is a classic novel by author F. Scott Fitzgerald, first published in 1925. The story revolves around the main character, Jay Gatsby, a wealthy and mysterious man, and his tumultuous relationship with a woman named Daisy Buchanan. The extravagant parties, complex romances, and struggles between the rich and poor are vividly and authentically depicted in this novel, creating a magnificent literary work about human desire, ambition, and desperation",
-                    CategoryId = categories[1].CategoryId,
-                    Category = categories[1],
-                    AuthorId = authors[4].AuthorId,
-                    Author = authors[4],
-                    PublisherId = publishers[4].PublisherId,
-                    Publisher = publishers[4],
-                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/The_Great_Gatsby_Cover_1925_Retouched_jJKUyAz7p.jpg?updatedAt=1679137550524",
-                    Price = 110000,
-                    PublicationDate = DateTime.Parse("1925/04/10"),
-                    TotalPage = 156,
-                    CreatedAt = DateTime.Parse("2023/02/23"),
-                    UpdatedAt = DateTime.Parse("2023/02/23")
-                }
-            };
-            db.Book.AddRange(books);
-
-            // Save changes to database
-            db.SaveChanges();
-
-            List<User> Users = new()
+            List<User> users = new()
             {
                 new User
                 {
@@ -186,7 +97,106 @@ namespace WebAPI.Database
                     Phone = "0987654321"
                 }
             };
-            db.User.AddRange(Users);
+            db.User.AddRange(users);
+            db.SaveChanges();
+
+            // Seed books
+            List<Book> books = new()
+            {
+                new Book {
+                    Title = "To Kill a Mockingbird",
+                    Description = "\"To Kill a Mockingbird\" is a novel by Harper Lee that takes place in the small town of Maycomb, Alabama during the 1930s. The story is told through the eyes of a young girl named Scout Finch, who lives with her older brother Jem and their widowed father, Atticus. The novel follows Scout and Jem as they navigate their way through the racial and social injustices of their town, including their father's decision to defend a black man named Tom Robinson who has been accused of raping a white woman.",
+                    CategoryId = categories[1].CategoryId,
+                    Category = categories[1],
+                    AuthorId = authors[2].AuthorId,
+                    Author = authors[2],
+                    PublisherId = publishers[3].PublisherId,
+                    Publisher = publishers[3],
+                    UserId = users[1].UserId,
+                    User = users[1],
+                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/To_Kill_a_Mockingbird__first_edition_cover_.jpg?updatedAt=1678868153319",
+                    Price = 159000,
+                    PublicationDate = DateTime.Parse("1960/07/11"),
+                    TotalPage = 281,
+                    CreatedAt = DateTime.Parse("2023/02/23"),
+                    UpdatedAt = DateTime.Parse("2023/02/23")
+                },
+                new Book {
+                    Title = "The Catcher in the Rye",
+                    Description = "The Catcher in the Rye is an American novel by J. D. Salinger that was partially published in serial form from 1945–46 before being novelized in 1951. Originally intended for adults, it is often read by adolescents for its themes of angst and alienation, and as a critique of superficiality in society. The novel also deals with complex issues of innocence, identity, belonging, loss, connection, sex, and depression. The main character, Holden Caulfield, has become an icon for teenage rebellion. Caulfield, nearly of age, gives his opinion on just about everything as he narrates his recent life events.",
+                    CategoryId = categories[1].CategoryId,
+                    Category = categories[1],
+                    AuthorId = authors[3].AuthorId,
+                    Author = authors[3],
+                    PublisherId = publishers[2].PublisherId,
+                    Publisher = publishers[2],
+                    UserId = users[1].UserId,
+                    User = users[1],
+                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/640px-The_Catcher_in_the_Rye__1951__first_edition_cover_.jpg?updatedAt=1678867114675",
+                    Price = 153000,
+                    PublicationDate = DateTime.Parse("1951/7/16"),
+                    TotalPage = 234,
+                    CreatedAt = DateTime.Parse("2023/02/23"),
+                    UpdatedAt = DateTime.Parse("2023/02/23")
+                },
+                new Book {
+                    Title = "Càng bình tĩnh, càng hạnh phúc",
+                    Description = "Cuốn sách số 7 với bìa sách tông màu tím cùng hoa diên vỹ mang thông điệp về sự bình tĩnh, an yên và hạnh phúc. Quy tụ 70 câu chuyện xoay quanh chủ đề tình yêu, hôn nhân, gia đình, sự nghiệp,.. Đấy là những câu chuyện của chính tác giả, của bạn bè, người thân xung quanh. Mình vẫn luôn đánh giá cao điều này ở tất cả các tác phẩm của Vãn Tình. Vì không chỉ mình, mà tất cả độc giả sẽ dễ dàng cảm nhận cũng như bắt gặp câu chuyện bản thân. Với một thông điệp truyền tải: Hy vọng giúp các cô gái trưởng thành, độc lập và tự tin hơn, tìm lại bản ngã và sống cuộc đời mà mình mong muốn.",
+                    CategoryId = categories[0].CategoryId,
+                    Category = categories[0],
+                    AuthorId = authors[1].AuthorId,
+                    Author = authors[1],
+                    PublisherId = publishers[0].PublisherId,
+                    Publisher = publishers[0],
+                    UserId = users[1].UserId,
+                    User = users[1],
+                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/cangbinhtinhcanghanhphuc_saysach-5_o9tRXdkUL.jpg?updatedAt=1679137339703",
+                    Price = 95000,
+                    PublicationDate = DateTime.Parse("2022/10/10"),
+                    TotalPage = 352,
+                    CreatedAt = DateTime.Parse("2023/02/23"),
+                    UpdatedAt = DateTime.Parse("2023/02/23")
+                },
+                new Book {
+                    Title = "Là Một Người Con Gái Gai Góc Cũng Có Thể Sưởi Ấm Cả Thế Gian",
+                    Description = "Là một người con gái gai góc cũng có thể sưởi ấm cả thế gian gồm 7 chương sách, nội dung xoay quanh những vấn đề của chính tác giả, từ cuộc sống đến tình yêu, gia đình và có cả công việc. Thông điệp mà cuốn sách muốn gửi đến độc giả đó là sinh ra là con gái chúng ta thường bị xã hội định kiến và gắn mác yếu đuối thế nhưng không vì đó mà chúng ta ngại không dám thay đổi bản thân, không dám theo đuổi ước mơ. Dù có là cô gái mạnh mẽ hay yếu đuối thì bạn xứng đáng được yêu thương và trân trọng.",
+                    CategoryId = categories[0].CategoryId,
+                    Category = categories[0],
+                    AuthorId = authors[0].AuthorId,
+                    Author = authors[0],
+                    PublisherId = publishers[1].PublisherId,
+                    Publisher = publishers[1],
+                    UserId = users[1].UserId,
+                    User = users[1],
+                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/image-20210122093912-2_pWPU3RAsv.jpg?updatedAt=1679137339913",
+                    Price = 102000,
+                    PublicationDate = DateTime.Parse("2020/11/12"),
+                    TotalPage = 340,
+                    CreatedAt = DateTime.Parse("2023/02/23"),
+                    UpdatedAt = DateTime.Parse("2023/02/23")
+                },
+                new Book {
+                    Title = "The Great Gatsby",
+                    Description = "\"The Great Gatsby\" is a classic novel by author F. Scott Fitzgerald, first published in 1925. The story revolves around the main character, Jay Gatsby, a wealthy and mysterious man, and his tumultuous relationship with a woman named Daisy Buchanan. The extravagant parties, complex romances, and struggles between the rich and poor are vividly and authentically depicted in this novel, creating a magnificent literary work about human desire, ambition, and desperation",
+                    CategoryId = categories[1].CategoryId,
+                    Category = categories[1],
+                    AuthorId = authors[4].AuthorId,
+                    Author = authors[4],
+                    PublisherId = publishers[4].PublisherId,
+                    Publisher = publishers[4],
+                    UserId = users[1].UserId,
+                    User = users[1],
+                    CoverImage = "https://ik.imagekit.io/nav26/PRN231-Danna/The_Great_Gatsby_Cover_1925_Retouched_jJKUyAz7p.jpg?updatedAt=1679137550524",
+                    Price = 110000,
+                    PublicationDate = DateTime.Parse("1925/04/10"),
+                    TotalPage = 156,
+                    CreatedAt = DateTime.Parse("2023/02/23"),
+                    UpdatedAt = DateTime.Parse("2023/02/23")
+                }
+            };
+            db.Book.AddRange(books);
+
+            // Save changes to database
             db.SaveChanges();
         }
     }
