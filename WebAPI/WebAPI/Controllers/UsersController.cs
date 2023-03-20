@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Model;
 using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     public class UsersController : BaseController
     {
         private readonly UserRepository _userRepository;

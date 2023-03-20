@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     public class BooksController : BaseController
     {
         private readonly BookRepository _bookRepository;

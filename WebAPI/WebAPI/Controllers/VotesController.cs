@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebAPI.Model;
 using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
+
+    [Authorize]
     public class VotesController : BaseController
     {
         private readonly VoteRepositorry _voteRepositorry;
