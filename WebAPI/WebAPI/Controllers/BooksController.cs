@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
@@ -80,7 +79,11 @@ namespace WebAPI.Controllers
         [HttpGet("user/{username}")]
         public ActionResult<IEnumerable<Book>> GetBooksByUsername(string username)
         {
-            var books = _bookRepository.GetBookByUsername(username);
+            if (string.IsNullOrEmpty(username))
+            {
+                return BadRequest();
+            }
+            ICollection<Book> books = _bookRepository.GetBookByUsername(username);
             return Ok(books);
         }
 

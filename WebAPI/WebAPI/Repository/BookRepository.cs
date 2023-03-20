@@ -211,9 +211,11 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public ICollection<Book> GetBookByUsername(string? username)
+        public ICollection<Book> GetBookByUsername(string username)
         {
-            return db.User.Where(u => u.UserName == username).SelectMany(u => u.Books).ToList();
+            return db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))
+                          .SelectMany(u => u.Books)
+                          .ToList();
         }
     }
 }
