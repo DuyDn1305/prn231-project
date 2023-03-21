@@ -6,7 +6,6 @@ using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    [Authorize]
     public class UsersController : BaseController
     {
         private readonly UserRepository _userRepository;
@@ -51,6 +50,7 @@ namespace WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
