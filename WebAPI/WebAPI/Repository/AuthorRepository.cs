@@ -27,7 +27,7 @@ namespace WebAPI.Repository
             return db.Author.FirstOrDefault(a => a.AuthorId == id) ?? new();
         }
 
-        public ICollection<Author> GetAuthors()
+        public virtual ICollection<Author> GetAuthors()
         {
             return db.Author.OrderBy(a => a.AuthorName).ToList();
         }

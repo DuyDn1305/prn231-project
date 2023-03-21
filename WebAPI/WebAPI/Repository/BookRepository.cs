@@ -122,7 +122,7 @@ namespace WebAPI.Repository
         }
 
 
-        public ICollection<BookDTO> GetBookDTOs(int pageSize, string startCursor)
+        public virtual ICollection<BookDTO> GetBookDTOs(int pageSize, string startCursor)
         {
             IQueryable<Book> query = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher).Include(p => p.Ratings).Include(p => p.Votes)
                 .AsSplitQuery()

@@ -22,7 +22,7 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public ICollection<Category> GetCategories()
+        public virtual ICollection<Category> GetCategories()
         {
             return db.Category.OrderBy(c => c.CategoryName).ToList();
         }

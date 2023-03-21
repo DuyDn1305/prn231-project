@@ -15,8 +15,11 @@ namespace WebAPI.Controllers
         private readonly CategoryRepository _categoryRepository;
         private readonly PublisherRepository _publisherRepository;
 
-
-        public BooksController(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository)
+        public BooksController(
+            BookRepository bookRepository,
+            AuthorRepository authorRepository,
+            CategoryRepository categoryRepository,
+            PublisherRepository publisherRepository)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
