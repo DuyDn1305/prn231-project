@@ -223,6 +223,11 @@ namespace WebAPI.Repository
             return Save();
         }
 
+        public int BookCountByUsername(string username)
+        {
+            return db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim())).SelectMany(u => u.Books).Count();
+        }
+
         public ICollection<BookDTO> GetBookByUsername(int pagesize, string startcursor, string username)
         {
             List<Book> books = db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))

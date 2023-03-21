@@ -100,7 +100,7 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = bookDTOs.Count(),
+                    count = _bookRepository.BookCountByUsername(username),
                     hasNextPage,
                     endCursor
                 }
@@ -128,7 +128,7 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = bookDTOs.Count(),
+                    count = _bookRepository.BookCountByUsername(username),
                     hasNextPage,
                     endCursor
                 }
