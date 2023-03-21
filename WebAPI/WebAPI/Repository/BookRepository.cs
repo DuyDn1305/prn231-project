@@ -39,6 +39,8 @@ namespace WebAPI.Repository
                 Price = book.Price,
                 CategoryId = book.CategoryId,
                 CategoryName = book.Category.CategoryName,
+                UserId = book.UserId,
+                UserName = book.User.UserName,
                 AuthorId = book.AuthorId,
                 AuthorDescription = book.Author.AuthorDescription,
                 AuthorUrl = book.Author.AuthorUrl,
@@ -76,6 +78,8 @@ namespace WebAPI.Repository
                 Price = b.Price,
                 CategoryId = b.CategoryId,
                 CategoryName = b.Category.CategoryName,
+                UserId = b.UserId,
+                UserName = b.User.UserName,
                 AuthorId = b.AuthorId,
                 AuthorName = b.Author.AuthorName,
                 AuthorDescription = b.Author.AuthorDescription,
@@ -153,6 +157,7 @@ namespace WebAPI.Repository
                         CoverImage = b.CoverImage,
                         Price = b.Price,
                         CategoryName = b.Category.CategoryName,
+                        UserName = b.User.UserName,
                         AuthorName = b.Author.AuthorName,
                         PublicationDate = b.PublicationDate,
                         TotalPage = b.TotalPage,
@@ -180,6 +185,7 @@ namespace WebAPI.Repository
                 CoverImage = b.CoverImage,
                 Price = b.Price,
                 CategoryName = b.Category.CategoryName,
+                UserName = b.User.UserName,
                 AuthorName = b.Author.AuthorName,
                 PublicationDate = b.PublicationDate,
                 TotalPage = b.TotalPage,
@@ -211,20 +217,139 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public ICollection<Book> GetBookByUsername(string username)
+        public ICollection<BookDTO> GetBookByUsername(int pagesize, string startcursor, string username)
         {
-            return db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))
-                          .SelectMany(u => u.Books)
-                          .ToList();
+            List<Book> books = db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))
+                                    .SelectMany(u => u.Books)
+                                    .Include(p => p.Category)
+                                    .Include(p => p.Author)
+                                    .Include(p => p.Publisher)
+                                    .Include(p => p.Ratings)
+                                    .Include(p => p.Votes)
+                                    .AsSplitQuery()
+                                    .OrderBy(b => b.BookId)
+                                    .ToList();
+            if (!string.IsNullOrEmpty(startcursor) && !string.IsNullOrEmpty(username))
+            {
+                List<Book> listBook = db.Book.OrderBy(b => b.BookId).ToList();
+                Book startBook = listBook[int.TryParse(startcursor, out int cursor) ? cursor - 1 : -1];
+                if (startBook != null)
+                {
+                    // Skip books until we find the start cursor
+                    int startIndex = books.FindIndex(b => b.BookId == startBook.BookId);
+                    if (startIndex >= 0)
+                    {
+                        books = books.Skip(startIndex).ToList();
+                    }
+
+                    // Take the requested number of books
+                    books = books.Take(pagesize).ToList();
+
+                    List<BookDTO> bookDTO = books.Select(b => new BookDTO
+                    {
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Description = b.Description,
+                        CoverImage = b.CoverImage,
+                        Price = b.Price,
+                        CategoryName = b.Category.CategoryName,
+                        UserName = b.User.UserName,
+                        AuthorName = b.Author.AuthorName,
+                        PublicationDate = b.PublicationDate,
+                        TotalPage = b.TotalPage,
+                        PublisherName = b.Publisher.PublisherName,
+                        CreatedAt = b.CreatedAt,
+                        UpdatedAt = b.UpdatedAt
+                    }).ToList();
+                    return bookDTO;
+                }
+            }
+            List<Book> takeBooks = books.Take(pagesize).ToList();
+
+            // Map the books to BookDTOs
+            List<BookDTO> bookDTOs = takeBooks.Select(b => new BookDTO
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Description = b.Description,
+                CoverImage = b.CoverImage,
+                Price = b.Price,
+                CategoryName = b.Category.CategoryName,
+                UserName = b.User.UserName,
+                AuthorName = b.Author.AuthorName,
+                PublicationDate = b.PublicationDate,
+                TotalPage = b.TotalPage,
+                PublisherName = b.Publisher.PublisherName,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt
+            }).ToList();
+            return bookDTOs;
         }
 
-        public ICollection<Book> GetBookByUsernameWithUser(string bookname, string username) {
-            var selectedUser = db.User.Include(u=>u.Books).FirstOrDefault(u => u.UserName == username);
+        public ICollection<BookDTO> GetBookByUsernameWithUser(int pagesize, string startcursor, string bookname, string username)
+        {
+            User? selectedUser = db.User.Include(u => u.Books).FirstOrDefault(u => u.UserName == username);
             if (selectedUser == null)
             {
                 return null;
             }
-            return selectedUser.Books.Where(b => b.Title.ToLower().Trim().Contains(bookname.ToLower().Trim())).ToList();
+            List<Book> books = selectedUser.Books.Where(b => b.Title.ToLower().Trim().Contains(bookname.ToLower().Trim())).ToList();
+
+            if (!string.IsNullOrEmpty(startcursor) && !string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(bookname))
+            {
+                List<Book> listBook = db.Book.OrderBy(b => b.BookId).ToList();
+                Book startBook = listBook[int.TryParse(startcursor, out int cursor) ? cursor - 1 : -1];
+                if (startBook != null)
+                {
+                    // Skip books until we find the start cursor
+                    int startIndex = books.FindIndex(b => b.BookId == startBook.BookId);
+                    if (startIndex >= 0)
+                    {
+                        books = books.Skip(startIndex).ToList();
+                    }
+
+                    // Take the requested number of books
+                    books = books.Take(pagesize).ToList();
+
+                    List<BookDTO> bookDTO = books.Select(b => new BookDTO
+                    {
+                        BookId = b.BookId,
+                        Title = b.Title,
+                        Description = b.Description,
+                        CoverImage = b.CoverImage,
+                        Price = b.Price,
+                        CategoryName = b.Category.CategoryName,
+                        UserName = b.User.UserName,
+                        AuthorName = b.Author.AuthorName,
+                        PublicationDate = b.PublicationDate,
+                        TotalPage = b.TotalPage,
+                        PublisherName = b.Publisher.PublisherName,
+                        CreatedAt = b.CreatedAt,
+                        UpdatedAt = b.UpdatedAt
+                    }).ToList();
+                    return bookDTO;
+                }
+            }
+            List<Book> takeBooks = books.Take(pagesize).ToList();
+
+            // Map the books to BookDTOs
+            List<BookDTO> bookDTOs = takeBooks.Select(b => new BookDTO
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Description = b.Description,
+                CoverImage = b.CoverImage,
+                Price = b.Price,
+                CategoryName = b.Category.CategoryName,
+                UserName = b.User.UserName,
+                AuthorName = b.Author.AuthorName,
+                PublicationDate = b.PublicationDate,
+                TotalPage = b.TotalPage,
+                PublisherName = b.Publisher.PublisherName,
+                CreatedAt = b.CreatedAt,
+                UpdatedAt = b.UpdatedAt
+            }).ToList();
+            return bookDTOs;
         }
     }
 }

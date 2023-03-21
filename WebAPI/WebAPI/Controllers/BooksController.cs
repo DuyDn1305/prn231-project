@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
@@ -78,30 +79,61 @@ namespace WebAPI.Controllers
             return !ModelState.IsValid ? BadRequest(ModelState) : Ok(books);
         }
 
-        [HttpGet("user/{username}")]
-        public ActionResult<IEnumerable<Book>> GetBooksByUsername(string username)
+        [HttpGet("user")]
+        public ActionResult<IEnumerable<BookDTO>> GetBooksByUsername(int pagesize=10,string startcursor = null, string username=null)
         {
             if (string.IsNullOrEmpty(username))
             {
                 return BadRequest();
             }
-            ICollection<Book> books = _bookRepository.GetBookByUsername(username);
-            return Ok(books);
+            ICollection<BookDTO> bookDTOs = _bookRepository.GetBookByUsername(pagesize,startcursor, username);
+
+            bool hasNextPage = bookDTOs.Count == pagesize;
+
+            // Get the cursor of the last book on the page
+            string? endCursor = bookDTOs.LastOrDefault()?.BookId.ToString();
+
+            // Create a result object with the books and pagination info
+            var result = new
+            {
+                books = bookDTOs,
+                pageInfo = new
+                {
+                    count = _bookRepository.BookCount(),
+                    hasNextPage,
+                    endCursor
+                }
+            };
+
+            return Ok(result);
         }
 
-        [HttpGet("user/{username}/{bookname}")]
-        public ActionResult<IEnumerable<Book>> GetBooksByGivenUsername(string username,string bookname)
+        [HttpGet("userbook")]
+        public ActionResult<IEnumerable<Book>> GetBookByGivenUsername(int pagesize = 10, string startcursor = null, string username=null,string bookname=null)
         {
-            if (string.IsNullOrEmpty(username)|| string.IsNullOrEmpty(bookname))
+            if (string.IsNullOrEmpty(username)|| string.IsNullOrEmpty(bookname) || string.IsNullOrEmpty(startcursor))
             {
                 return BadRequest();
             }
-            ICollection<Book> books = _bookRepository.GetBookByUsernameWithUser(bookname,username);
-            if (books == null)
+            ICollection<BookDTO> bookDTOs = _bookRepository.GetBookByUsernameWithUser(pagesize, startcursor, bookname, username);
+            bool hasNextPage = bookDTOs.Count == pagesize;
+
+            // Get the cursor of the last book on the page
+            string? endCursor = bookDTOs.LastOrDefault()?.BookId.ToString();
+
+            // Create a result object with the books and pagination info
+            var result = new
             {
-                ModelState.AddModelError("", "Could not find book with the given username");
-            }
-            return Ok(books);
+                books = bookDTOs,
+                pageInfo = new
+                {
+                    count = _bookRepository.BookCount(),
+                    hasNextPage,
+                    endCursor
+                }
+            };
+
+            return Ok(result);
         }
 
 
