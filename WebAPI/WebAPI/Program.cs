@@ -60,6 +60,7 @@ namespace WebAPI
             builder.Services.AddScoped<PublisherRepository>();
             builder.Services.AddScoped<RatingRepository>();
             builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<VoteRepositorry>();
             builder.Services.AddScoped<AppDBContext>();
 
             WebApplication app = builder.Build();

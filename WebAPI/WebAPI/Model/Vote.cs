@@ -11,9 +11,9 @@ namespace WebAPI.Model
         [Range(0, 2)]
         public int VoteValue { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; } = new();
+        public User? User { get; set; } = new();
 
         public int BookId { get; set; }
-        public Book Book { get; set; } = new();
+        public Book? Book { get; set; } = new();
     }
 }
