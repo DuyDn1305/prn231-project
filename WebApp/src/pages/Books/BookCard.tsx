@@ -23,10 +23,7 @@ function BookCard({ bookId, title, description, coverImage, price }: Book) {
       key={bookId}
       className="center relative m-1 flex min-w-min max-w-[18rem] flex-col justify-end break-words rounded-t-2xl rounded-b-2xl border border-neutral-400"
     >
-      <img
-        className="h-96 w-full rounded-t-2xl rounded-b-2xl"
-        src={coverImage}
-      />
+      <img className="h-96 w-full rounded-t-2xl" src={coverImage} />
       <div className="flex flex-auto flex-col justify-between p-4">
         <div className="w-64 break-words font-bold">{title}</div>
         <p className="max-h-[70px] overflow-hidden font-light italic">

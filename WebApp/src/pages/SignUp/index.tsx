@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,41 +11,36 @@ function SignUp() {
   const navigate = useNavigate();
   let username = useRef("");
   let password = useRef("");
-  //   let email = useRef("");
+  let email = useRef("");
   //   let phone = useRef("");
 
   const handleNavigateToLogin = () => {
     navigate("/login");
   };
 
-  const { data, refetch, error, isSuccess } = useQuery({
-    queryKey: ["resgister"],
-    queryFn: () => {
+  const mutation = useMutation({
+    mutationFn: () => {
       return register({
         userId: 0,
         userName: username.current,
         password: password.current,
-        email: "",
+        email: email.current,
         phone: "",
         bookmarks: [],
         ratings: [],
         votes: []
       });
     },
-    retry: false,
-    refetchOnWindowFocus: false,
-    enabled: false
+    onSuccess: () => {
+      notifySuccess("New account registration successful!");
+      navigate("/login");
+    }
   });
 
   const handleRegister = (e: React.ChangeEvent<EventTarget>) => {
     e.preventDefault();
-    refetch();
+    mutation.mutate();
   };
-
-  if (isSuccess) {
-    notifySuccess("New account registration successful!");
-    navigate("/login");
-  }
 
   return (
     <>
@@ -54,11 +49,16 @@ function SignUp() {
           <h1 className="text-center text-3xl font-bold uppercase text-purple-700">
             Sign up
           </h1>
-          {error instanceof AxiosError ? (
-            JSON.parse(error.request?.response).isUsernameExist[0] !==
-            undefined ? (
+          {mutation.error instanceof AxiosError ? (
+            JSON.parse(mutation.error.request?.response).message ===
+            "Username already exists" ? (
               <h4 className="animate__animated animate__flash text-center text-xl font-bold text-red-500">
                 Username already exists
+              </h4>
+            ) : JSON.parse(mutation.error.request?.response).message ===
+              "Email already exists" ? (
+              <h4 className="animate__animated animate__flash text-center text-xl font-bold text-red-500">
+                Email already exists
               </h4>
             ) : null
           ) : null}
@@ -91,6 +91,22 @@ function SignUp() {
                 type="password"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                className=" mt-2 block w-full rounded-md border bg-white px-4 py-2 text-purple-700 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 focus:ring-opacity-40"
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-800"
+              >
+                Email
+              </label>
+              <input
+                onChange={(e) => (email.current = e.target.value)}
+                type="email"
+                pattern="\S+@\S+\.\S+"
+                title="Email address is not valid"
                 className=" mt-2 block w-full rounded-md border bg-white px-4 py-2 text-purple-700 focus:border-purple-400 focus:outline-none focus:ring focus:ring-purple-300 focus:ring-opacity-40"
                 required
               />

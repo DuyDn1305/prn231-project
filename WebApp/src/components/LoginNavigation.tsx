@@ -63,7 +63,7 @@ function LoginNavigation() {
       {localStorage["username"] ? (
         <>
           <div className="flex items-center">
-            <div>
+            {/* <div>
               <div
                 className={
                   selected === "/" || selected === "/book"
@@ -74,6 +74,16 @@ function LoginNavigation() {
                 Book
               </div>
               <div className="lihov bg-gradient-swap absolute z-10 hidden w-[150px] flex-col rounded-bl-lg rounded-br-2xl rounded-tr-md drop-shadow-lg hover:flex peer-hover:flex ">
+                <NavLink
+                  className="btn group relative inline-flex items-center justify-start overflow-hidden bg-purple-100 py-3 px-4  transition-all"
+                  to="/mybooks"
+                  onClick={() => setSelected("/")}
+                >
+                  <span className="-z-1 absolute top-0 left-0 h-0 w-0 bg-gradient-to-r from-purple-400 to-purple-700 transition-all duration-500 ease-out group-hover:h-full group-hover:w-full"></span>
+                  <span className="z-10 w-full text-xl text-purple-600 transition-colors duration-300 ease-in-out hover:font-bold group-hover:text-white ">
+                    My books
+                  </span>
+                </NavLink>
                 <NavLink
                   className="btn group relative inline-flex items-center justify-start overflow-hidden bg-purple-100 py-3 px-4  transition-all"
                   to="/"
@@ -95,77 +105,50 @@ function LoginNavigation() {
                   </span>
                 </NavLink>
               </div>
-            </div>
-
+            </div> */}
             <div>
               <div
                 className={
-                  selected === "/category"
+                  selected === "/" || selected === "/book"
                     ? "peer flex h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl font-bold text-white transition-all duration-300  hover:text-opacity-50"
                     : "peer flex  h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl text-white transition-all duration-300 hover:font-bold hover:text-opacity-80"
                 }
               >
-                Category
-              </div>
-
-              <div className="lihov bg-gradient-swap absolute z-10 hidden w-[150px] flex-col rounded-bl-lg rounded-br-2xl rounded-tr-md drop-shadow-lg hover:flex peer-hover:flex ">
-                <NavLink
-                  className="btn group relative inline-flex items-center justify-start overflow-hidden rounded-b-lg bg-purple-100 py-3 px-4  transition-all"
-                  to="/category/create"
-                  onClick={() => setSelected("/category")}
-                >
-                  <span className="-z-1 absolute top-0 left-0 h-0 w-0 rounded-b-lg bg-gradient-to-r from-purple-400 to-purple-700 transition-all duration-500 ease-out group-hover:h-full group-hover:w-full"></span>
-                  <span className="z-10 w-full text-xl text-purple-600 transition-colors duration-300 ease-in-out hover:font-bold group-hover:text-white ">
-                    Add new
-                  </span>
+                <NavLink className="" to="/" onClick={() => setSelected("/")}>
+                  Read all
                 </NavLink>
               </div>
             </div>
             <div>
               <div
                 className={
-                  selected === "/author"
+                  selected === "/mybooks"
                     ? "peer flex h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl font-bold text-white transition-all duration-300  hover:text-opacity-50"
-                    : "peer flex h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl text-white transition-all duration-300 hover:font-bold hover:text-opacity-80"
+                    : "peer flex  h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl text-white transition-all duration-300 hover:font-bold hover:text-opacity-80"
                 }
               >
-                Author
-              </div>
-
-              <div className="lihov bg-gradient-swap absolute z-10 hidden w-[150px] flex-col rounded-bl-lg rounded-br-2xl rounded-tr-md drop-shadow-lg hover:flex peer-hover:flex ">
                 <NavLink
-                  className="btn group relative inline-flex items-center justify-start overflow-hidden rounded-b-lg bg-purple-100 py-3 px-4  transition-all"
-                  to="/author/create"
-                  onClick={() => setSelected("/author")}
+                  className=""
+                  to="/mybooks"
+                  onClick={() => setSelected("/mybooks")}
                 >
-                  <span className="-z-1 absolute top-0 left-0 h-0 w-0 rounded-b-lg bg-gradient-to-r from-purple-400 to-purple-700 transition-all duration-500 ease-out group-hover:h-full group-hover:w-full"></span>
-                  <span className="z-10 w-full text-xl text-purple-600 transition-colors duration-300 ease-in-out hover:font-bold group-hover:text-white ">
-                    Add new
-                  </span>
+                  My books
                 </NavLink>
               </div>
             </div>
             <div>
               <div
                 className={
-                  selected === "/publisher"
-                    ? "peer flex h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl font-bold text-white transition-all duration-300  hover:text-opacity-50"
-                    : "peer flex h-16 w-36 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl text-white transition-all duration-300 hover:font-bold hover:text-opacity-80"
+                  selected === "/book/create"
+                    ? "peer flex h-16 w-44 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl font-bold text-white transition-all duration-300  hover:text-opacity-50"
+                    : "peer flex  h-16 w-44 cursor-pointer items-center justify-center pl-4 pr-4 text-2xl text-white transition-all duration-300 hover:font-bold hover:text-opacity-80"
                 }
               >
-                Publisher
-              </div>
-
-              <div className="lihov bg-gradient-swap absolute z-10 hidden w-[150px] flex-col rounded-bl-lg rounded-br-2xl rounded-tr-md drop-shadow-lg hover:flex peer-hover:flex ">
                 <NavLink
-                  className="btn group relative inline-flex items-center justify-start overflow-hidden rounded-b-lg bg-purple-100 py-3 px-4  transition-all"
-                  to="/publisher/create"
-                  onClick={() => setSelected("/publisher")}
+                  to="/book/create"
+                  onClick={() => setSelected("/book/create")}
                 >
-                  <span className="-z-1 absolute top-0 left-0 h-0 w-0 rounded-b-lg bg-gradient-to-r from-purple-400 to-purple-700 transition-all duration-500 ease-out group-hover:h-full group-hover:w-full"></span>
-                  <span className="z-10 w-full text-xl text-purple-600 transition-colors duration-300 ease-in-out hover:font-bold group-hover:text-white ">
-                    Add new
-                  </span>
+                  Create book
                 </NavLink>
               </div>
             </div>

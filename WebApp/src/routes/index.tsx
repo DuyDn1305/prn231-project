@@ -2,14 +2,12 @@ import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 import NavigationBar from "../components/Layout/NavigationBar";
 import PageNotFound from "../components/PageNotFound";
-import CreateAuthor from "../pages/Authors/Create";
 import BookList from "../pages/Books";
 import BookDetail from "../pages/Books/BookDetail";
 import CreateBook from "../pages/Books/Create";
-import CreateCategory from "../pages/Category/Create";
 import Login from "../pages/Login";
-import CreatePublisher from "../pages/Publisher/Create";
 import SignUp from "../pages/SignUp";
+import UserBooks from "../pages/UserBooks";
 
 function MainRoutes() {
   return (
@@ -45,38 +43,24 @@ function MainRoutes() {
           />
           {/* End book routes */}
 
-          {/* Author routes */}
+          {/* User routes */}
           <Route
-            path="/author/create"
+            path="/mybooks"
             element={
               <PrivateRoute>
-                <CreateAuthor />
+                <UserBooks />
               </PrivateRoute>
             }
           />
-          {/* End author routes */}
-
-          {/* Category routes */}
           <Route
-            path="/category/create"
+            path="/mybooks/book/:bookId"
             element={
               <PrivateRoute>
-                <CreateCategory />
+                <BookDetail />
               </PrivateRoute>
             }
           />
-          {/* End category routes */}
-
-          {/* Publisher routes */}
-          <Route
-            path="/publisher/create"
-            element={
-              <PrivateRoute>
-                <CreatePublisher />
-              </PrivateRoute>
-            }
-          />
-          {/* End publisher routes */}
+          {/* End User routes */}
 
           {/* Login, sign up routes */}
           <Route

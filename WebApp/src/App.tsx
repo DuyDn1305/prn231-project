@@ -11,6 +11,11 @@ queryClient.invalidateQueries({ queryKey: ["authors", "all"] });
 queryClient.invalidateQueries({ queryKey: ["publishers", "all"] });
 queryClient.invalidateQueries({ queryKey: ["categories", "all"] });
 queryClient.invalidateQueries({ queryKey: ["books", "pagination"] });
+queryClient.invalidateQueries({ queryKey: ["books", "paginate", "user"] });
+queryClient.invalidateQueries({
+  queryKey: ["books", "search", "user", "bookName"]
+});
+queryClient.invalidateQueries({ queryKey: ["books", "search"] });
 queryClient.invalidateQueries({ queryKey: ["books/count"] });
 
 function App() {

@@ -29,34 +29,30 @@ function Login() {
     },
     onError: () => {
       notifyError("Login fail!");
+    },
+    onSuccess: (data) => {
+      localStorage["token"] = data.data.token;
+      localStorage["expiration"] = data.data.expiration;
+      localStorage["username"] = username.current;
+      mutationUser.mutate();
     }
   });
 
-  const { data, refetch, error, isSuccess } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => {
+  const mutationUser = useMutation({
+    mutationFn: () => {
       return getUser(username.current);
     },
-    retry: false,
-    refetchOnWindowFocus: false,
-    enabled: false
+    onSuccess(data) {
+      localStorage["userId"] = data.data.userId;
+      notifyDefault("Login success!");
+      navigate("/");
+    }
   });
 
   const handleLogin = (e: React.ChangeEvent<EventTarget>) => {
     e.preventDefault();
     mutation.mutate();
-    refetch();
   };
-
-  if (mutation.isSuccess && isSuccess) {
-    localStorage["token"] = mutation.data.data.token;
-    localStorage["expiration"] = mutation.data.data.expiration;
-    localStorage["username"] = username.current;
-    localStorage["userId"] = data.data.userId;
-
-    notifyDefault("Login success!");
-    navigate("/");
-  }
 
   return (
     <div className="animate__animated animate__bounceInLeft relative flex min-h-[60vh] flex-col justify-center overflow-hidden">

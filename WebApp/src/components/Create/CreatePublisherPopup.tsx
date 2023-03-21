@@ -1,15 +1,19 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
-import { postPublisher } from "../../../apis/Publisher.api";
-import { notifyDefault, notifyError } from "../../../components/Notification";
+import { postPublisher } from "../../apis/Publisher.api";
+import { notifyDefault, notifyError } from "../Notification";
 
 interface PublisherForm {
   publisherName: string;
   publisherUrl: string;
 }
 
-function CreatePublisher() {
+function CreatePublisherPopup({
+  closeModalPublisher
+}: {
+  closeModalPublisher: Function;
+}) {
   const {
     register,
     handleSubmit,
@@ -29,6 +33,7 @@ function CreatePublisher() {
     onSuccess: () => {
       notifyDefault("Create new publisher successfully!");
       reset();
+      closeModalPublisher();
     },
     onError: () => {
       notifyError("New publisher creation failed... Please try again!");
@@ -40,11 +45,10 @@ function CreatePublisher() {
   });
 
   return (
-    <div className="flex min-h-[80vh] flex-col justify-center bg-gray-50">
+    <div className="flex min-h-min flex-col justify-center rounded-lg border border-gray-300 bg-gray-100">
       <div className="mx-auto w-full max-w-md">
-        <div className="text-center text-xl font-medium">Create</div>
         <div className="mt-2 text-center text-3xl font-bold text-gray-900">
-          new publisher
+          New publisher
         </div>
       </div>
       <div className="mx-auto mt-4 w-full max-w-md rounded-md border border-gray-300 bg-white p-8">
@@ -128,4 +132,4 @@ function CreatePublisher() {
   );
 }
 
-export default CreatePublisher;
+export default CreatePublisherPopup;

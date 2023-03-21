@@ -80,8 +80,10 @@ function BookDetails() {
                   </svg>
                   <span className="pl-2 font-light text-zinc-700">Author</span>
                 </div>
-                <div className="break-words font-normal text-purple-500">
-                  {data?.data.authorName}
+                <div className="break-words font-normal italic text-blue-600">
+                  <a href={data?.data.authorUrl} target="_blank">
+                    {data?.data.authorName}
+                  </a>
                 </div>
               </div>
               <div className="mb-2 flex flex-row">

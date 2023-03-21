@@ -6,6 +6,8 @@ export interface Book {
   price: number;
   categoryId: number;
   categoryName: string;
+  userId: number;
+  userName: string;
   authorId: number;
   authorName: string;
   authorDescription: string;
@@ -54,12 +56,9 @@ export interface Publisher {
 }
 
 export interface Vote {
-  voteId: number;
   voteValue: number;
-  userId: number;
-  user: User;
+  username: string | undefined;
   bookId: number;
-  book: Book;
 }
 
 export interface User {

@@ -16,7 +16,8 @@
     "react-hook-form": "^7.43.5",
     "react-router-dom": "^6.8.1",
     "react-simple-star-rating": "^5.1.7",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "reactjs-popup": "^2.0.5"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
