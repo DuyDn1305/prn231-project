@@ -54,7 +54,11 @@ namespace WebAPI.Repository
             return bookDtos;
         }
 
-        public ICollection<BookDTO> GetBookByName(string name)
+        public Book GetBookDefaultById(int id)
+        {
+            return db.Book.FirstOrDefault(b => b.BookId == id) ?? new();
+        } 
+            public ICollection<BookDTO> GetBookByName(string name)
         {
             List<Book> books = db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
