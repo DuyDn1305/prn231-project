@@ -64,7 +64,7 @@ namespace WebAPI.Repository
         {
             List<Book> books = db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
-                            .Include(p => p.Ratings).Include(p => p.Votes)
+                            .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.User)
                             .AsSplitQuery()
                             .ToList();
             foreach (Book? book in books)
@@ -112,6 +112,7 @@ namespace WebAPI.Repository
                 .Include(p => p.Publisher)
                 .Include(p => p.Ratings)
                 .Include(p => p.Votes)
+                .Include(p => p.User)
                 .AsSplitQuery()
                 .OrderBy(b => b.Title)
                 .ToList();
@@ -129,6 +130,7 @@ namespace WebAPI.Repository
         public virtual ICollection<BookDTO> GetBookDTOs(int pageSize, string startCursor)
         {
             IQueryable<Book> query = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher).Include(p => p.Ratings).Include(p => p.Votes)
+                .Include(p => p.User)
                 .AsSplitQuery()
                 .OrderBy(b => b.BookId);
 
@@ -230,6 +232,7 @@ namespace WebAPI.Repository
                                     .Include(p => p.Publisher)
                                     .Include(p => p.Ratings)
                                     .Include(p => p.Votes)
+                                    .Include(p => p.User)
                                     .AsSplitQuery()
                                     .OrderBy(b => b.BookId)
                                     .ToList();
