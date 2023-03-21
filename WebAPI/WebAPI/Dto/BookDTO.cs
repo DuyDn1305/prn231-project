@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebAPI.Dto
 {
     public class BookDTO
     {
@@ -15,6 +17,10 @@
         public int? CategoryId { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
+
+        public int? UserId { get; set; }
+
+        public string UserName { get; set; } = string.Empty;
 
         public int? AuthorId { get; set; }
 
