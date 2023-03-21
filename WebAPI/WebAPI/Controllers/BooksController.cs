@@ -128,13 +128,13 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = _bookRepository.BookCountByUsername(username),
+                    count = _bookRepository.BookCountOfUserByName(username, bookname),
                     hasNextPage,
                     endCursor
                 }
             };
 
-            return Ok(result);
+                return Ok(result);
         }
 
 
