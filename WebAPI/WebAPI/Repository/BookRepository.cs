@@ -27,7 +27,7 @@ namespace WebAPI.Repository
         public BookDTO GetBookById(int id)
         {
             Book book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
-                            .Include(p => p.Ratings).Include(p => p.Votes)
+                            .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.User)
                             .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
             BookDTO bookDtos = new()

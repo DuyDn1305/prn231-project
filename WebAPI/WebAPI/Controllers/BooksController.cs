@@ -14,14 +14,15 @@ namespace WebAPI.Controllers
         private readonly AuthorRepository _authorRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly PublisherRepository _publisherRepository;
+        private readonly UserRepository _userRepository;
 
-
-        public BooksController(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository)
+        public BooksController(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, PublisherRepository publisherRepository, UserRepository userRepository)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
             _publisherRepository = publisherRepository;
+            _userRepository = userRepository;
         }
         [HttpGet]
         public IActionResult GetBooks(int pageSize = 10, string startCursor = null)
@@ -197,7 +198,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            User? user = await _userRepository.FindByNameAsync(bookRequest.Username);
             bool bookCreated = _bookRepository.CreateBook(new()
             {
                 Title = bookRequest.Title,
@@ -208,6 +209,8 @@ namespace WebAPI.Controllers
                 Category = _categoryRepository.GetCategoryById(bookRequest.CategoryId),
                 AuthorId = bookRequest.AuthorId,
                 Author = _authorRepository.GetAuthorById(bookRequest.AuthorId),
+                UserId = user.UserId,
+                User = user,
                 PublicationDate = bookRequest.PublicationDate,
                 TotalPage = bookRequest.TotalPage,
                 PublisherId = bookRequest.PublisherId,
@@ -277,4 +280,5 @@ public class BookRequest
     public int TotalPage { get; set; }
 
     public int PublisherId { get; set; }
+    public string Username { get; set; } = string.Empty;
 }
