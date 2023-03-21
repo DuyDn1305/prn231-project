@@ -94,12 +94,13 @@ namespace WebAPI.Controllers
             string? endCursor = bookDTOs.LastOrDefault()?.BookId.ToString();
 
             // Create a result object with the books and pagination info
+            // k.duy fix here, return coutn = bookDTOs.Count()
             var result = new
             {
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = _bookRepository.BookCount(),
+                    count = bookDTOs.Count(),
                     hasNextPage,
                     endCursor
                 }
@@ -127,7 +128,7 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = _bookRepository.BookCount(),
+                    count = bookDTOs.Count(),
                     hasNextPage,
                     endCursor
                 }
