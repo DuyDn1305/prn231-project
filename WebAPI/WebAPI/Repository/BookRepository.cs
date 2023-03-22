@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using WebAPI.Database;
 using WebAPI.Dto;
 using WebAPI.Model;
@@ -94,7 +95,8 @@ namespace WebAPI.Repository
                 PublisherName = b.Publisher.PublisherName,
                 PublisherUrl = b.Publisher.PublisherUrl,
                 CreatedAt = b.CreatedAt,
-                UpdatedAt = b.UpdatedAt
+                UpdatedAt = b.UpdatedAt,
+                rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
             }).ToList();
             return bookDtos;
         }
@@ -173,7 +175,9 @@ namespace WebAPI.Repository
                         TotalPage = b.TotalPage,
                         PublisherName = b.Publisher.PublisherName,
                         CreatedAt = b.CreatedAt,
-                        UpdatedAt = b.UpdatedAt
+                        UpdatedAt = b.UpdatedAt,
+                        rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
                     }).ToList();
 
                     return bookDtos;
@@ -201,7 +205,9 @@ namespace WebAPI.Repository
                 TotalPage = b.TotalPage,
                 PublisherName = b.Publisher.PublisherName,
                 CreatedAt = b.CreatedAt,
-                UpdatedAt = b.UpdatedAt
+                UpdatedAt = b.UpdatedAt,
+                rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
             }).ToList();
 
             return bookDTOs;
@@ -279,7 +285,9 @@ namespace WebAPI.Repository
                         TotalPage = b.TotalPage,
                         PublisherName = b.Publisher.PublisherName,
                         CreatedAt = b.CreatedAt,
-                        UpdatedAt = b.UpdatedAt
+                        UpdatedAt = b.UpdatedAt,
+                        rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
                     }).ToList();
                     return bookDTO;
                 }
@@ -301,7 +309,9 @@ namespace WebAPI.Repository
                 TotalPage = b.TotalPage,
                 PublisherName = b.Publisher.PublisherName,
                 CreatedAt = b.CreatedAt,
-                UpdatedAt = b.UpdatedAt
+                UpdatedAt = b.UpdatedAt,
+                rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
             }).ToList();
             return bookDTOs;
         }
@@ -345,7 +355,9 @@ namespace WebAPI.Repository
                         TotalPage = b.TotalPage,
                         PublisherName = b.Publisher.PublisherName,
                         CreatedAt = b.CreatedAt,
-                        UpdatedAt = b.UpdatedAt
+                        UpdatedAt = b.UpdatedAt,
+                        rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
                     }).ToList();
                     return bookDTO;
                 }
@@ -367,7 +379,9 @@ namespace WebAPI.Repository
                 TotalPage = b.TotalPage,
                 PublisherName = b.Publisher.PublisherName,
                 CreatedAt = b.CreatedAt,
-                UpdatedAt = b.UpdatedAt
+                UpdatedAt = b.UpdatedAt,
+                rateAvarage = db.Rating.Where(r => r.BookId == b.BookId).Count() != 0 ? db.Rating.Where(r => r.BookId == b.BookId).Average(r => r.RatingStar) : 0
+
             }).ToList();
             return bookDTOs;
         }
