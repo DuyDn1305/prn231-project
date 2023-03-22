@@ -8,7 +8,7 @@ using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BooksController : BaseController
     {
         private readonly BookRepository _bookRepository;

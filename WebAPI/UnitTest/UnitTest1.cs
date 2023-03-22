@@ -224,7 +224,7 @@ namespace UnitTest
         public async Task DeleteBook_WithValidBookId_ReturnsNoContent()
         {
             // Arrange
-            var bookIdToDelete = 7;
+            var bookIdToDelete = 8;
             var requestUri = $"books/{bookIdToDelete}";
 
             // Act
