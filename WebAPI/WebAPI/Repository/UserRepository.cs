@@ -50,7 +50,7 @@ namespace WebAPI.Repository
 
         public async Task<IdentityResult> CreateAsync(User user, string password)
         {
-            string hashedPassword = new PasswordHasher<User>().HashPassword(user, password);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
             user.Password = hashedPassword;
             await db.AddAsync(user);
             return db.SaveChangesAsync().Result > 0 ? IdentityResult.Success : IdentityResult.Failed();

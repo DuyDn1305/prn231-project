@@ -107,7 +107,7 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = bookDTOs.Count(),
+                    count = _bookRepository.BookCountByUsername(username),
                     hasNextPage,
                     endCursor
                 }
@@ -135,13 +135,13 @@ namespace WebAPI.Controllers
                 books = bookDTOs,
                 pageInfo = new
                 {
-                    count = bookDTOs.Count(),
+                    count = _bookRepository.BookCountOfUserByName(username, bookname),
                     hasNextPage,
                     endCursor
                 }
             };
 
-            return Ok(result);
+                return Ok(result);
         }
 
 
@@ -204,7 +204,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            User? user = await _userRepository.FindByNameAsync(bookRequest.Username);
             bool bookCreated = _bookRepository.CreateBook(new()
             {
                 Title = bookRequest.Title,
@@ -292,4 +292,5 @@ public class BookRequest
     public int TotalPage { get; set; }
 
     public int PublisherId { get; set; }
+    public string Username { get; set; } = string.Empty;
 }

@@ -26,8 +26,8 @@ namespace WebAPI.Repository
 
         public BookDTO GetBookById(int id)
         {
-            Book book = db.Book.Include(p=>p.User).Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
-                            .Include(p => p.Ratings).Include(p => p.Votes)
+            Book book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+                            .Include(p => p.Ratings).Include(p => p.Votes).Include(p => p.User)
                             .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
             BookDTO bookDtos = new()
@@ -227,7 +227,16 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public ICollection<BookDTO> GetBookByUsername(int pagesize, string? startcursor, string username)
+        public int BookCountByUsername(string username)
+        {
+            return db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim())).SelectMany(u => u.Books).Count();
+        }
+        public int BookCountOfUserByName(string username, string bookName)
+        {
+            return db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim())).SelectMany(u => u.Books).Where(b => b.Title.Contains(bookName.ToLower().Trim())).Count();
+        }
+
+        public ICollection<BookDTO> GetBookByUsername(int pagesize, string startcursor, string username)
         {
             List<Book> books = db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))
                                     .SelectMany(u => u.Books)
