@@ -98,6 +98,7 @@ function CreateBook() {
     formData.append("totalPage", data.totalPage + "");
     formData.append("publisherId", data.publisherId + "");
     formData.append("username", localStorage["username"] + "");
+    formData.append("userId", localStorage["userId"] + "");
 
     mutation.mutate(formData);
   });

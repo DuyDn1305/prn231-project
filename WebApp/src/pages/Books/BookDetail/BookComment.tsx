@@ -5,9 +5,10 @@ import UserComment from "./UserRating";
 
 export interface CommentOfBook {
   bookId: string | undefined;
+  refetchBook: Function;
 }
 
-function BookComment({ bookId }: CommentOfBook) {
+function BookComment({ bookId, refetchBook }: CommentOfBook) {
   const { data } = useQuery({
     queryKey: ["book", bookId, "comment"],
     queryFn: () => {
@@ -40,7 +41,7 @@ function BookComment({ bookId }: CommentOfBook) {
           </div>
 
           {/* User input comment */}
-          <UserComment bookId={bookId} />
+          <UserComment bookId={bookId} refetchBook={refetchBook} />
 
           {/* Book comment */}
           {data?.data.map((rating, index) => (

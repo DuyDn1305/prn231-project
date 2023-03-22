@@ -6,7 +6,7 @@ import { postRating } from "../../../apis/Book.api";
 import { notifyDefault, notifyError } from "../../../components/Notification";
 import { CommentOfBook } from "./BookComment";
 
-function UserComment({ bookId }: CommentOfBook) {
+function UserComment({ bookId, refetchBook }: CommentOfBook) {
   const [rating, setRating] = useState(0);
   const [isEmptyComment, setIsEmptyComment] = useState(false);
   const [isRatingStar, setIsRatingStar] = useState(false);
@@ -31,6 +31,7 @@ function UserComment({ bookId }: CommentOfBook) {
       queryClient.refetchQueries(["book", bookId, "comment"]);
       clearCommentContent.current!.value = "";
       notifyDefault("Rating successfully!");
+      refetchBook();
     },
     onError: () => {
       notifyError("You already voted for this book!");

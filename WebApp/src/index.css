@@ -40,4 +40,9 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
+  .opt-drop-shadow {
+    box-shadow: rgba(16, 126, 210, 0.4) 0px 10px 36px 0px,
+      rgba(11, 119, 214, 0.4) 0px 0px 0px 1px;
+  }
 }

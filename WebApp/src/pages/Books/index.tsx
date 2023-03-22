@@ -49,6 +49,7 @@ function BookList() {
       return getBooksByName(searchKey.current);
     },
     onSuccess: (data) => {
+      console.log(data);
       setCurrentItems(data?.data);
       setTotalItems(data?.data.length);
       setPageCount(Math.ceil(data?.data.length / itemsPerPage));
@@ -71,7 +72,7 @@ function BookList() {
   return (
     <>
       <div className="mb-5 flex justify-center text-center">
-        <div className="flex min-h-[50px] w-[100px] items-center justify-center gap-2 rounded-full p-3 outline outline-1 outline-cyan-500 transition-all focus-within:w-[400px] focus-within:outline-2 hover:outline-cyan-600">
+        <div className="hover:opt-drop-shadow focus-within:opt-drop-shadow flex min-h-[50px] w-[100px] items-center justify-center gap-2 rounded-full p-3 outline outline-1 outline-cyan-500 transition-all duration-300 focus-within:w-[400px] focus-within:outline-2 hover:outline-cyan-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -133,14 +134,7 @@ function BookList() {
         )}
         <div className="grid gap-4 pb-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {currentItems?.map((colBook, index: number) => (
-            <BookCard
-              key={index}
-              description={colBook.description}
-              title={colBook.title}
-              coverImage={colBook.coverImage}
-              bookId={colBook.bookId}
-              price={colBook.price}
-            />
+            <BookCard key={index} book={colBook} />
           ))}
         </div>
       </div>

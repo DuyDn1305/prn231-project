@@ -20,6 +20,7 @@ export interface Book {
   publisherName: string;
   createdAt: string;
   updatedAt: string;
+  rateAvarage: number;
 }
 
 interface PagesInfo {
