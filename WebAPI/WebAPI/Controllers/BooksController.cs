@@ -1,30 +1,34 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
+using WebAPI.Database;
 using WebAPI.Dto;
 using WebAPI.Model;
 using WebAPI.Repository;
 
 namespace WebAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class BooksController : BaseController
     {
         private readonly BookRepository _bookRepository;
         private readonly AuthorRepository _authorRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly PublisherRepository _publisherRepository;
+        private readonly UserRepository _userRepository;
 
         public BooksController(
             BookRepository bookRepository,
             AuthorRepository authorRepository,
             CategoryRepository categoryRepository,
-            PublisherRepository publisherRepository)
+            PublisherRepository publisherRepository,
+            UserRepository userRepository)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
             _publisherRepository = publisherRepository;
+            _userRepository = userRepository;
         }
         [HttpGet]
         public IActionResult GetBooks(int pageSize = 10, string startCursor = null)
@@ -83,7 +87,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("user")]
-        public ActionResult<IEnumerable<BookDTO>> GetBooksByUsername(int pagesize=10,string startcursor = null, string username=null)
+        public ActionResult<IEnumerable<BookDTO>> GetBooksByUsername(int pagesize=10,string? startcursor = null, string username=null)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -211,6 +215,8 @@ namespace WebAPI.Controllers
                 Category = _categoryRepository.GetCategoryById(bookRequest.CategoryId),
                 AuthorId = bookRequest.AuthorId,
                 Author = _authorRepository.GetAuthorById(bookRequest.AuthorId),
+                UserId = bookRequest.UserId,
+                User = _userRepository.GetUserById(bookRequest.UserId),
                 PublicationDate = bookRequest.PublicationDate,
                 TotalPage = bookRequest.TotalPage,
                 PublisherId = bookRequest.PublisherId,
@@ -231,8 +237,12 @@ namespace WebAPI.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteCategory(int bookId)
+        public IActionResult DeleteBook(int bookId)
         {
+            if(bookId <= 0)
+            {
+                return BadRequest();
+            }
             if (!_bookRepository.IsBookExits(bookId))
             {
                 return NotFound();
@@ -274,6 +284,8 @@ public class BookRequest
     public int CategoryId { get; set; }
 
     public int AuthorId { get; set; }
+
+    public int UserId { get; set; }
 
     public DateTime PublicationDate { get; set; }
 

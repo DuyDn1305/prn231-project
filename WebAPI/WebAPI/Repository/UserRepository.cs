@@ -27,6 +27,11 @@ namespace WebAPI.Repository
             return db.User.OrderBy(b => b.UserId).ToList();
         }
 
+        public User GetUserById(int id)
+        {
+            return db.User.FirstOrDefault(c => c.UserId == id) ?? new();
+        }
+
         public Task<User?>? FindByNameAsync(string username)
         {
             return db.User.FirstOrDefaultAsync(u => u.UserName == username) ?? null;

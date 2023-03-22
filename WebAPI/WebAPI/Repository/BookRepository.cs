@@ -26,7 +26,7 @@ namespace WebAPI.Repository
 
         public BookDTO GetBookById(int id)
         {
-            Book book = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
+            Book book = db.Book.Include(p=>p.User).Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
                             .Include(p => p.Ratings).Include(p => p.Votes)
                             .AsSplitQuery()
                             .FirstOrDefault(b => b.BookId == id) ?? new();
@@ -59,8 +59,8 @@ namespace WebAPI.Repository
         public Book GetBookDefaultById(int id)
         {
             return db.Book.FirstOrDefault(b => b.BookId == id) ?? new();
-        } 
-            public ICollection<BookDTO> GetBookByName(string name)
+        }
+        public ICollection<BookDTO> GetBookByName(string name)
         {
             List<Book> books = db.Book.Where(b => b.Title.ToLower().Trim().Contains(name.ToLower().Trim()))
                             .Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher)
@@ -129,10 +129,14 @@ namespace WebAPI.Repository
 
         public virtual ICollection<BookDTO> GetBookDTOs(int pageSize, string startCursor)
         {
-            IQueryable<Book> query = db.Book.Include(p => p.Category).Include(p => p.Author).Include(p => p.Publisher).Include(p => p.Ratings).Include(p => p.Votes)
-                .Include(p => p.User)
-                .AsSplitQuery()
-                .OrderBy(b => b.BookId);
+
+            IQueryable<Book> query = db.Book.Include(p => p.Category)
+                                        .Include(p => p.Author).Include(p => p.Publisher)
+                                        .Include(p => p.Ratings)
+                                        .Include(p => p.Votes)
+                                        .Include(p => p.User)
+                                        .AsSplitQuery()
+                                        .OrderBy(b => b.BookId);
 
             if (!string.IsNullOrEmpty(startCursor))
             {
@@ -163,7 +167,7 @@ namespace WebAPI.Repository
                         CoverImage = b.CoverImage,
                         Price = b.Price,
                         CategoryName = b.Category.CategoryName,
-                        UserName = b.User.UserName,
+                        UserName = string.Empty,
                         AuthorName = b.Author.AuthorName,
                         PublicationDate = b.PublicationDate,
                         TotalPage = b.TotalPage,
@@ -223,7 +227,7 @@ namespace WebAPI.Repository
             return Save();
         }
 
-        public ICollection<BookDTO> GetBookByUsername(int pagesize, string startcursor, string username)
+        public ICollection<BookDTO> GetBookByUsername(int pagesize, string? startcursor, string username)
         {
             List<Book> books = db.User.Where(u => u.UserName.ToLower().Trim().Contains(username.ToLower().Trim()))
                                     .SelectMany(u => u.Books)
