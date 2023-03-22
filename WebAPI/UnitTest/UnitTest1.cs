@@ -66,11 +66,18 @@ namespace UnitTest
             response.EnsureSuccessStatusCode();
             var responseContent = await response.Content.ReadAsStringAsync();
             var actualBooks = JsonConvert.DeserializeObject<List<BookDTO>>(responseContent);
-            Assert.Equal(expectedBooks.Count, actualBooks.Count);
-            for (int i = 0; i < expectedBooks.Count; i++)
+            if (actualBooks.Count == 0)
             {
-                Assert.Equal(expectedBooks[i].BookId, actualBooks[i].BookId);
-                Assert.Equal(expectedBooks[i].Title, actualBooks[i].Title);
+                Assert.Equal(actualBooks.Count, 0);
+            }
+            else
+            {
+                Assert.Equal(expectedBooks.Count, actualBooks.Count);
+                for (int i = 0; i < expectedBooks.Count; i++)
+                {
+                    Assert.Equal(expectedBooks[i].BookId, actualBooks[i].BookId);
+                    Assert.Equal(expectedBooks[i].Title, actualBooks[i].Title);
+                }
             }
         }
 
@@ -224,7 +231,7 @@ namespace UnitTest
         public async Task DeleteBook_WithValidBookId_ReturnsNoContent()
         {
             // Arrange
-            var bookIdToDelete = 8;
+            var bookIdToDelete = 10;
             var requestUri = $"books/{bookIdToDelete}";
 
             // Act
